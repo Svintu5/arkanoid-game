@@ -135,7 +135,7 @@ ctx.shadowColor = 'transparent';
     });
     
 // Счёт в левый верхний угол
-ctx.font = '20px Switzer, Arial';
+ctx.font = 'bold 24px Switzer, Arial';
 ctx.fillStyle = '#cc3da4'; // основной цвет
 ctx.textAlign = 'left';
 ctx.textBaseline = 'top';
@@ -146,7 +146,7 @@ ctx.fillText('Score: ' + score, 10, 10);
 
 
 // жизни в правый верхний угол
-ctx.font = '20px Switzer, Arial';
+ctx.font = 'bold 24px Switzer, Arial';
 ctx.fillStyle = '#cc3da4'; // основной цвет
 ctx.textAlign = 'left';
 ctx.textBaseline = 'top';
