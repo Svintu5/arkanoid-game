@@ -2,6 +2,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const livesEl = document.getElementById('lives');
+
 const ballImg = new Image();
 ballImg.src = 'ball.png';
 
@@ -12,6 +13,7 @@ let bricks = [];
 let score = 0;
 let lives = 3;
 let gameRunning = false;
+let gameStatus = 'playing'; // 'playing' | 'win' | 'lose'
 
 // Создаём кирпичи (5 рядов по 10)
 function initBricks() {
@@ -74,8 +76,7 @@ function draw() {
     livesEl.textContent = lives;
 
     // Сообщение об окончании игры (проигрыш или победа)
-    const hasBricks = bricks.some(b => b.status === 1);
-    if (!gameRunning && (lives <= 0 || !hasBricks)) {
+    if (!gameRunning && gameStatus !== 'playing') {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -83,7 +84,7 @@ function draw() {
         ctx.font = '32px Arial';
         ctx.textAlign = 'center';
 
-        const text = (lives <= 0) ? 'Game over' : 'You win!';
+        const text = (gameStatus === 'lose') ? 'Game over' : 'You win!';
         ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 20);
 
         ctx.font = '24px Arial';
@@ -93,7 +94,11 @@ function draw() {
 
 // Игровой цикл
 function gameLoop() {
-    if (!gameRunning) return;
+    if (!gameRunning) {
+        // дорисовать финальный кадр с оверлеем
+        draw();
+        return;
+    }
     
     draw();
       
@@ -117,9 +122,12 @@ function gameLoop() {
 
     // Выпадение за нижнюю границу
     if (ball.y - ball.radius > canvas.height) {
-        lives--;
+        if (lives > 0) {
+            lives--;
+        }
         if (lives <= 0) {
-            gameRunning = false; // останавливаем игру, draw покажет оверлей
+            gameRunning = false;
+            gameStatus = 'lose';
         } else {
             // сброс шарика и ракетки
             ball.x = canvas.width / 2;
@@ -163,6 +171,7 @@ function gameLoop() {
     const hasBricks = bricks.some(b => b.status === 1);
     if (!hasBricks) {
         gameRunning = false;
+        gameStatus = 'win';
     }
     
     requestAnimationFrame(gameLoop);
@@ -171,7 +180,7 @@ function gameLoop() {
 // Старт игры (Enter)
 window.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) { // Enter
-        if (!gameRunning) {
+        if (!gameRunning && gameStatus !== 'playing') {
             // рестарт
             score = 0;
             lives = 3;
@@ -181,6 +190,7 @@ window.addEventListener('keydown', (e) => {
             ball.dy = -4;
             paddle.x = (canvas.width - paddle.width) / 2;
             initBricks();
+            gameStatus = 'playing';
         }
         gameRunning = true;
         gameLoop();
