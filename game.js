@@ -51,8 +51,8 @@ function draw() {
             ballImg,
             ball.x - ball.radius,
             ball.y - ball.radius,
-            ball.radius * 2,
-            ball.radius * 2
+            ball.radius * 5,
+            ball.radius * 5
         );
     } else {
         ctx.beginPath();
@@ -73,18 +73,22 @@ function draw() {
     scoreEl.textContent = score;
     livesEl.textContent = lives;
 
-    // Сообщение об окончании игры
-    if (!gameRunning && lives <= 0) {
+    // Сообщение об окончании игры (проигрыш или победа)
+    if (!gameRunning && (lives <= 0 || !bricks.some(b => b.status === 1))) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = '#fff';
         ctx.font = '32px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('Игра окончена', canvas.width / 2, canvas.height / 2 - 20);
+
+        const text = (lives <= 0) ? 'Игра окончена' : 'Победа!';
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 20);
+
         ctx.font = '24px Arial';
         ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
     }
+
 }
 
 // Игровой цикл
@@ -154,7 +158,16 @@ function gameLoop() {
             break;
         }
     }
+
+    // Победа — все кирпичи уничтожены
+    const hasBricks = bricks.some(b => b.status === 1);
+        if (!hasBricks) {
+            gameRunning = false;
+    }
     
+    requestAnimationFrame(gameLoop);
+}
+
     requestAnimationFrame(gameLoop);
 }
 
