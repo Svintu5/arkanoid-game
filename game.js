@@ -319,12 +319,12 @@ ctx.shadowBlur = 0;
     };
     }
     // Иконка звука (нота) в левом нижнем углу
-    const iconX = 30;
-    const iconY = canvas.height - 30;
+    const iconX = 36;
+    const iconY = canvas.height - 36;
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = '24px Switzer, Arial';
+    ctx.font = '36px Switzer, Arial';
     ctx.fillStyle = soundOn ? '#cc3da4' : '#666666';
     ctx.shadowColor = soundOn ? '#cc3da4' : 'transparent';
     ctx.shadowBlur = soundOn ? 10 : 0;
