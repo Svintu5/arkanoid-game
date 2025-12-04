@@ -12,7 +12,7 @@ const brickImages = [
     Object.assign(new Image(), { src: 'brick3.png' }),
     Object.assign(new Image(), { src: 'brick4.png' }),
     Object.assign(new Image(), { src: 'brick5.png' }),
-    Object.assign(new Image(), { src: 'brick6.png' })
+    Object.assign(new Image(), { src: 'brick6.png' }),
 ];
 
 const backImg = new Image();
@@ -27,6 +27,43 @@ hitSound.volume = 0.3;
 lostSound.volume = 0.1;
 startSound.volume = 0.4;
 finishSound.volume = 0.4;
+
+let playerName = localStorage.getItem('playerName') || 'Игрок';
+let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+function savePlayerName(name) {
+    playerName = name.trim() || 'Игрок';
+    localStorage.setItem('playerName', playerName);
+}
+
+function addScoreToLeaderboard(score) {
+    leaderboard.push({ name: playerName, score: score });
+    leaderboard.sort((a, b) => b.score - a.score); // по убыванию
+    leaderboard = leaderboard.slice(0, 10); // топ 10
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+}
+
+function promptPlayerName() {
+    const nameContainer = document.getElementById('nameInput');
+    nameContainer.style.display = 'block';
+}
+
+function saveName() {
+    const input = document.getElementById('playerName');
+    if (input.value.trim()) {
+        playerName = input.value.trim();
+        localStorage.setItem('playerName', playerName);
+        document.getElementById('nameInput').style.display = 'none';
+        startGame();
+    }
+}
+
+function startGame() {
+    gameRunning = true;
+    startSound.currentTime = 0;
+    startSound.play();
+    gameLoop();
+}
 
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
@@ -52,7 +89,7 @@ function initBricks() {
                 width: brickW,
                 height: brickH,
                 status: 1,
-                type: type
+                type: type,
             });
         }
     }
@@ -62,8 +99,8 @@ initBricks();
 
 // Управление клавишами
 let keys = {};
-window.addEventListener('keydown', (e) => keys[e.keyCode] = true);
-window.addEventListener('keyup', (e) => keys[e.keyCode] = false);
+window.addEventListener('keydown', (e) => (keys[e.keyCode] = true));
+window.addEventListener('keyup', (e) => (keys[e.keyCode] = false));
 
 // Отрисовка
 function draw() {
@@ -74,36 +111,40 @@ function draw() {
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    
-   // Ракетка с градиентом и свечением
-const gradient = ctx.createLinearGradient(paddle.x, paddle.y, paddle.x + paddle.width, paddle.y + paddle.height);
-gradient.addColorStop(0, '#ffffff');
-gradient.addColorStop(0.5, '#cc3da4');
-gradient.addColorStop(1, '#990077');
 
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 20;
-ctx.fillStyle = gradient;
-ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    // Ракетка с градиентом и свечением
+    const gradient = ctx.createLinearGradient(
+        paddle.x,
+        paddle.y,
+        paddle.x + paddle.width,
+        paddle.y + paddle.height
+    );
+    gradient.addColorStop(0, '#ffffff');
+    gradient.addColorStop(0.5, '#cc3da4');
+    gradient.addColorStop(1, '#990077');
 
-// Контур
-ctx.shadowBlur = 0;
-ctx.strokeStyle = '#ffffff';
-ctx.lineWidth = 3;
-ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    ctx.shadowColor = '#cc3da4';
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = gradient;
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-// Свечение края
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 8;
-ctx.strokeStyle = '#cc3da4';
-ctx.lineWidth = 1;
-ctx.strokeRect(paddle.x + 1, paddle.y + 1, paddle.width - 2, paddle.height - 2);
+    // Контур
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-// Сброс свечения
-ctx.shadowBlur = 0;
-ctx.shadowColor = 'transparent';
+    // Свечение края
+    ctx.shadowColor = '#cc3da4';
+    ctx.shadowBlur = 8;
+    ctx.strokeStyle = '#cc3da4';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(paddle.x + 1, paddle.y + 1, paddle.width - 2, paddle.height - 2);
 
-    
+    // Сброс свечения
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+
     // Шарик
     if (ballImg.complete) {
         ctx.drawImage(
@@ -120,9 +161,9 @@ ctx.shadowColor = 'transparent';
         ctx.fill();
         ctx.closePath();
     }
-    
+
     // Кирпичи как картинки
-    bricks.forEach(brick => {
+    bricks.forEach((brick) => {
         if (brick.status === 1) {
             const img = brickImages[brick.type];
             if (img.complete) {
@@ -133,73 +174,82 @@ ctx.shadowColor = 'transparent';
             }
         }
     });
-    
-// Счёт в левый верхний угол
-ctx.font = 'bold 24px Switzer, Arial';
-ctx.fillStyle = '#cc3da4'; // основной цвет
-ctx.textAlign = 'left';
-ctx.textBaseline = 'top';
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 10;
 
-ctx.fillText('Score: ' + score, 10, 10);
-
-
-// жизни в правый верхний угол
-ctx.font = 'bold 24px Switzer, Arial';
-ctx.fillStyle = '#cc3da4'; // основной цвет
-ctx.textAlign = 'left';
-ctx.textBaseline = 'top';
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 10;
-
-ctx.fillText('Lives: ' + lives, 700, 10);
-
-ctx.shadowBlur = 0; // убрать свечения дальше
-
-    
-    // Сообщение перед стартом
-if (!gameRunning && lives > 0 && score === 0) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#cc3da4';
-    ctx.font = 'bold 48px Switzer, Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    // Счёт в левый верхний угол
+    ctx.font = 'bold 24px Switzer, Arial';
+    ctx.fillStyle = '#cc3da4'; // основной цвет
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
     ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 20;
-    ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
-    
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur = 10;
 
-    ctx.font = 'bold 26px Switzer, Arial';
-    ctx.fillText('Left + Right to move', canvas.width / 2, canvas.height / 2 + 50);
-}
+    ctx.fillText('Score: ' + score, 10, 10);
+
+    // Жизни в правый верхний угол
+    ctx.font = 'bold 24px Switzer, Arial';
+    ctx.fillStyle = '#cc3da4'; // основной цвет
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.shadowColor = '#cc3da4';
+    ctx.shadowBlur = 10;
+
+    ctx.fillText('Lives: ' + lives, 700, 10);
+
+    ctx.shadowBlur = 0; // убрать свечения дальше
+
+    // Сообщение перед стартом
+    if (!gameRunning && lives > 0 && score === 0) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#cc3da4';
+        ctx.font = 'bold 48px Switzer, Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#cc3da4';
+        ctx.shadowBlur = 20;
+        ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
+
+        ctx.shadowBlur = 0;
+
+        ctx.font = 'bold 26px Switzer, Arial';
+        ctx.fillText('Left + Right to move', canvas.width / 2, canvas.height / 2 + 50);
+    }
 
     // Сообщение Game Over
-if (!gameRunning && lives <= 0) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (!gameRunning && lives <= 0) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#cc3da4'; // Game Over тоже #cc3da4
-    ctx.font = 'bold 64px Switzer, Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 30;
-    ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 40);
-    
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 32px Switzer, Arial';
-    ctx.fillText('Your score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
-    
-    ctx.fillStyle = '#cc3da4'; // кнопка тоже #cc3da4
-    ctx.font = '32px Switzer, Arial';
-    ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
-}
+        ctx.fillStyle = '#cc3da4'; // Game Over тоже #cc3da4
+        ctx.font = 'bold 64px Switzer, Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#cc3da4';
+        ctx.shadowBlur = 30;
+        ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 40);
 
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 32px Switzer, Arial';
+        ctx.fillText('Your score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+
+        ctx.fillStyle = '#cc3da4'; // кнопка тоже #cc3da4
+        ctx.font = '32px Switzer, Arial';
+        ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
+
+        ctx.font = '20px Switzer, Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText('Топ игроков:', canvas.width / 2, canvas.height / 2 + 120);
+
+        leaderboard.forEach((entry, i) => {
+            const y = canvas.height / 2 + 150 + i * 25;
+            ctx.fillStyle = i === 0 ? '#ffd700' : '#cc3da4';
+            ctx.font = i === 0 ? 'bold 24px Switzer, Arial' : '20px Switzer, Arial';
+            ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
+        });
+    }
 }
 
 // Игровой цикл
@@ -211,7 +261,7 @@ function gameLoop() {
     // Движение ракетки
     if (keys[37] && paddle.x > 0) paddle.x -= paddle.speed;
     if (keys[39] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed;
-    
+
     // Движение шарика
     ball.x += ball.dx;
     ball.y += ball.dy;
@@ -234,6 +284,7 @@ function gameLoop() {
             gameRunning = false;
             finishSound.currentTime = 0;
             finishSound.play();
+            addScoreToLeaderboard(score);
         } else {
             ball.x = canvas.width / 2;
             ball.y = canvas.height - 60;
