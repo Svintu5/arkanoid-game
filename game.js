@@ -25,8 +25,8 @@ let gameRunning = false;
 
 function initBricks() {
     bricks = [];
-    const brickW = 25;
-    const brickH = 25;
+    const brickW = 40;
+    const brickH = 40;
     const offsetX = 10;
     const offsetY = 40;
 
