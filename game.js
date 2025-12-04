@@ -148,12 +148,12 @@ ctx.fillText('Score: ' + score, 10, 10);
 // жизни в правый верхний угол
 ctx.font = '20px Switzer, Arial';
 ctx.fillStyle = '#cc3da4'; // основной цвет
-ctx.textAlign = 'right';
+ctx.textAlign = 'left';
 ctx.textBaseline = 'top';
 ctx.shadowColor = '#cc3da4';
 ctx.shadowBlur = 10;
 
-ctx.fillText('Lives: ' + lives, 10, 40);
+ctx.fillText('Lives: ' + lives, 700, 10);
 
 ctx.shadowBlur = 0; // убрать свечения дальше
 
