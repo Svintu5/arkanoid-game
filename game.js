@@ -75,9 +75,34 @@ function draw() {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     
-    // Ракетка
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+   // Ракетка с градиентом и свечением
+const gradient = ctx.createLinearGradient(paddle.x, paddle.y, paddle.x + paddle.width, paddle.y + paddle.height);
+gradient.addColorStop(0, '#ffffff');
+gradient.addColorStop(0.5, '#cc3da4');
+gradient.addColorStop(1, '#990077');
+
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 20;
+ctx.fillStyle = gradient;
+ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+// Контур
+ctx.shadowBlur = 0;
+ctx.strokeStyle = '#ffffff';
+ctx.lineWidth = 3;
+ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
+
+// Свечение края
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 8;
+ctx.strokeStyle = '#cc3da4';
+ctx.lineWidth = 1;
+ctx.strokeRect(paddle.x + 1, paddle.y + 1, paddle.width - 2, paddle.height - 2);
+
+// Сброс свечения
+ctx.shadowBlur = 0;
+ctx.shadowColor = 'transparent';
+
     
     // Шарик
     if (ballImg.complete) {
