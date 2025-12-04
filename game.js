@@ -45,23 +45,22 @@ function draw() {
     ctx.fillStyle = '#fff';
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
     
-    // Шарик
-if (ballImg.complete) {
-    ctx.drawImage(
-        ballImg,
-        ball.x - ball.radius,
-        ball.y - ball.radius,
-        ball.radius * 10,
-        ball.radius * 10
-    );
-} else {
-    // запасной вариант — круг, пока картинка не загрузилась
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#ff0';
-    ctx.fill();
-    ctx.closePath();
-}
+    // Шарик (картинка + запасной круг)
+    if (ballImg.complete) {
+        ctx.drawImage(
+            ballImg,
+            ball.x - ball.radius,
+            ball.y - ball.radius,
+            ball.radius * 2,
+            ball.radius * 2
+        );
+    } else {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff0';
+        ctx.fill();
+        ctx.closePath();
+    }
     
     // Кирпичи
     bricks.forEach(brick => {
@@ -73,6 +72,19 @@ if (ballImg.complete) {
     
     scoreEl.textContent = score;
     livesEl.textContent = lives;
+
+    // Сообщение об окончании игры
+    if (!gameRunning && lives <= 0) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#fff';
+        ctx.font = '32px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Игра окончена', canvas.width / 2, canvas.height / 2 - 20);
+        ctx.font = '24px Arial';
+        ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
+    }
 }
 
 // Игровой цикл
@@ -86,96 +98,4 @@ function gameLoop() {
     if (keys[39] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed; // →
     
     // Движение шарика
-    ball.x += ball.dx;
-    ball.y += ball.dy;
-
-        // Отскок от вертикальных стен
-    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
-        ball.dx = -ball.dx;
-    }
-
-    // Отскок от верхней границы
-    if (ball.y - ball.radius < 0) {
-        ball.dy = -ball.dy;
-    }
-
-    // Выпадение за нижнюю границу
-    if (ball.y - ball.radius > canvas.height) {
-        lives--;
-            if (lives <= 0) {
-            gameRunning = false; // останавливаем цикл
-            }
-
-        } else {
-            // сброс шарика и ракетки
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height - 60;
-            ball.dx = 4;
-            ball.dy = -4;
-            paddle.x = (canvas.width - paddle.width) / 2;
-        }
-    }
-
-    // Коллизия с ракеткой
-    if (
-        ball.y + ball.radius > paddle.y &&
-        ball.y - ball.radius < paddle.y + paddle.height &&
-        ball.x > paddle.x &&
-        ball.x < paddle.x + paddle.width
-    ) {
-        ball.dy = -Math.abs(ball.dy);
-        const hitPos = ball.x - (paddle.x + paddle.width / 2);
-        ball.dx = hitPos * 0.15; // можно менять чувствительность
-    }
-
-    // Коллизия с кирпичами
-    for (let i = 0; i < bricks.length; i++) {
-        const brick = bricks[i];
-        if (
-            brick.status === 1 &&
-            ball.x > brick.x &&
-            ball.x < brick.x + brick.width &&
-            ball.y - ball.radius < brick.y + brick.height &&
-            ball.y + ball.radius > brick.y
-        ) {
-            brick.status = 0;
-            score += 10;
-            ball.dy = -ball.dy;
-            break;
-        }
-    }
-
-    // Сообщение об окончании игры
-        if (!gameRunning && lives <= 0) {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-            ctx.fillStyle = '#fff';
-            ctx.font = '32px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('Игра окончена', canvas.width / 2, canvas.height / 2 - 20);
-            ctx.font = '24px Arial';
-            ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
-        }
-    requestAnimationFrame(gameLoop);
-}
-
-// Старт игры (Enter)
-window.addEventListener('keydown', (e) => {
-    if (e.keyCode === 13) { // Enter
-        if (!gameRunning) {
-            // рестарт
-            score = 0;
-            lives = 3;
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height - 60;
-            ball.dx = 4;
-            ball.dy = -4;
-            paddle.x = (canvas.width - paddle.width) / 2;
-            initBricks();
-        }
-        gameRunning = true;
-        gameLoop();
-    }
-});
-
+    ball.x
