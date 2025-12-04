@@ -22,7 +22,7 @@ function initBricks() {
     const offsetY = 40;
 
     for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 30; col++) { // можно больше колонок
+        for (let col = 0; col < 27; col++) { // можно больше колонок
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
                 y: row * (brickH + 6) + offsetY,
