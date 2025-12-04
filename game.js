@@ -160,21 +160,34 @@ function draw() {
         }
     });
 
-    // Счёт
-    ctx.font = 'bold 24px Switzer, Arial';
-    ctx.fillStyle = '#cc3da4';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 10;
-    ctx.fillText('Score: ' + score, 10, 10);
+    // Счёт слева
+ctx.font = 'bold 24px Switzer, Arial';
+ctx.fillStyle = '#cc3da4';
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 10;
+ctx.fillText('Score: ' + score, 10, 10);
 
-    // Жизни
-    ctx.font = 'bold 24px Switzer, Arial';
-    ctx.fillStyle = '#cc3da4';
-    ctx.fillText('Lives: ' + lives, 700, 10);
+// Имя игрока по центру сверху
+ctx.font = '20px Switzer, Arial';
+ctx.fillStyle = '#ffffff';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'top';
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 8;
+ctx.fillText('Player: ' + playerName, canvas.width / 2, 10);
 
-    ctx.shadowBlur = 0;
+// Жизни справа
+ctx.font = 'bold 24px Switzer, Arial';
+ctx.fillStyle = '#cc3da4';
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 10;
+ctx.fillText('Lives: ' + lives, 700, 10);
+
+ctx.shadowBlur = 0;
 
     // Стартовый экран
     if (!gameRunning && lives > 0 && score === 0) {
