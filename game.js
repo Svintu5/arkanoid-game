@@ -18,6 +18,9 @@ const brickImages = [
 const backImg = new Image();
 backImg.src = 'back.png';
 
+const hitSound = new Audio('hit.mp3');
+hitSound.volume = 0.5;
+
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
 let ball = { x: 400, y: 500, radius: 8, dx: 4, dy: -4 };
@@ -171,17 +174,20 @@ function gameLoop() {
         }
     }
 
-    // Коллизия с ракеткой
-    if (
-        ball.y + ball.radius > paddle.y &&
-        ball.y - ball.radius < paddle.y + paddle.height &&
-        ball.x > paddle.x &&
-        ball.x < paddle.x + paddle.width
-    ) {
-        ball.dy = -Math.abs(ball.dy);
-        const hitPos = ball.x - (paddle.x + paddle.width / 2);
-        ball.dx = hitPos * 0.15;
-    }
+// Коллизия с ракеткой
+if (
+    ball.y + ball.radius > paddle.y &&
+    ball.y - ball.radius < paddle.y + paddle.height &&
+    ball.x > paddle.x &&
+    ball.x < paddle.x + paddle.width
+) {
+    ball.dy = -Math.abs(ball.dy);
+    const hitPos = ball.x - (paddle.x + paddle.width / 2);
+    ball.dx = hitPos * 0.15;
+
+    hitSound.currentTime = 0;
+    hitSound.play();
+}
 
     // Коллизия с кирпичами
     for (let i = 0; i < bricks.length; i++) {
@@ -193,10 +199,12 @@ function gameLoop() {
             ball.y - ball.radius < brick.y + brick.height &&
             ball.y + ball.radius > brick.y
         ) {
-            brick.status = 0;
+           brick.status = 0;
             score += 10;
             ball.dy = -ball.dy;
-            break;
+
+            hitSound.currentTime = 0;
+            hitSound.play();
         }
     }
 
