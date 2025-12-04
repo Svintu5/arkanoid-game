@@ -79,15 +79,13 @@ function initBricks() {
 
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 18; col++) {
-            const type = row;
             let hits;
-
             if (row === 4) {
-                hits = 2;  // предпоследний ряд — 2 удара
+                hits = 2;  // предпоследний ряд
             } else if (row === 5) {
-                hits = 3;  // последний ряд — 3 удара
+                hits = 3;  // последний ряд
             } else {
-                hits = 1;  // первые 4 ряда — 1 удар
+                hits = 1;  // первые 4 ряда
             }
 
             bricks.push({
@@ -96,12 +94,13 @@ function initBricks() {
                 width: brickW,
                 height: brickH,
                 status: 1,
-                type: type,
+                type: row,
                 hits: hits,
             });
         }
     }
 }
+
 
 
 initBricks();
@@ -411,26 +410,27 @@ function gameLoop() {
     }
 
     // Коллизия с кирпичами
-    for (let i = 0; i < bricks.length; i++) {
-        const brick = bricks[i];
-        if (
-    brick.status === 1 &&
-    ball.x > brick.x &&
-    ball.x < brick.x + brick.width &&
-    ball.y - ball.radius < brick.y + brick.height &&
-    ball.y + ball.radius > brick.y
-) {
-    brick.hits -= 1;          // снижаем счётчик ударов
-    if (brick.hits <= 0) {
-        brick.status = 0;     // уничтожаем кирпич, когда удары закончились
-        score += 10;
+for (let i = 0; i < bricks.length; i++) {
+    const brick = bricks[i];
+    if (
+        brick.status === 1 &&
+        ball.x > brick.x &&
+        ball.x < brick.x + brick.width &&
+        ball.y - ball.radius < brick.y + brick.height &&
+        ball.y + ball.radius > brick.y
+    ) {
+        brick.hits -= 1;          // уменьшаем количество оставшихся ударов
+        if (brick.hits <= 0) {
+            brick.status = 0;     // уничтожаем кирпич, когда удары закончились
+            score += 10;
+        }
+        ball.dy = -ball.dy;
+        hitSound.currentTime = 0;
+        hitSound.play();
+        break;
     }
-    ball.dy = -ball.dy;
-    hitSound.currentTime = 0;
-    hitSound.play();
-    break;
 }
-    }
+
 
     draw();
     requestAnimationFrame(gameLoop);
