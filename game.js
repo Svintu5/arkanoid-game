@@ -343,7 +343,11 @@ function gameLoop() {
 // Старт игры (Enter)
 window.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) {
-        if (!gameRunning && lives <= 0) {
+        if (
+            !gameRunning &&
+            (lives <= 0 || bricks.every(brick => brick.status === 0))
+        ) {
+            // Полный рестарт
             score = 0;
             lives = 3;
             ball.x = canvas.width / 2;
@@ -353,6 +357,7 @@ window.addEventListener('keydown', (e) => {
             paddle.x = (canvas.width - paddle.width) / 2;
             initBricks();
         }
+
         gameRunning = true;
         startSound.currentTime = 0;
         startSound.play();
