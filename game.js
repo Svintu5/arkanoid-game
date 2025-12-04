@@ -14,18 +14,22 @@ let score = 0;
 let lives = 3;
 let gameRunning = false;
 
-// Создаём кирпичи (5 рядов по 10)
 function initBricks() {
     bricks = [];
+    const brickW = 25;  // было 75
+    const brickH = 7;   // было 20
+    const offsetX = 10;
+    const offsetY = 40;
+
     for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 10; col++) {
+        for (let col = 0; col < 20; col++) { // можно больше колонок
             bricks.push({
-                x: col * 78 + 5,
-                y: row * 25 + 50,
-                width: 75,
-                height: 20,
+                x: col * (brickW + 4) + offsetX,
+                y: row * (brickH + 6) + offsetY,
+                width: brickW,
+                height: brickH,
                 status: 1,
-                color: `hsl(${row * 30}, 70%, 50%)`
+                color: `hsl(${row * 40}, 70%, 50%)`
             });
         }
     }
@@ -63,13 +67,20 @@ function draw() {
         ctx.closePath();
     }
     
-    // Кирпичи
-    bricks.forEach(brick => {
-        if (brick.status === 1) {
-            ctx.fillStyle = brick.color;
-            ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
-        }
-    });
+// Кирпичи как кружки
+bricks.forEach(brick => {
+    if (brick.status === 1) {
+        const cx = brick.x + brick.width / 2;
+        const cy = brick.y + brick.height / 2;
+        const r  = Math.min(brick.width, brick.height) / 2;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = brick.color;
+        ctx.fill();
+        ctx.closePath();
+    }
+});
     
     scoreEl.textContent = score;
     livesEl.textContent = lives;
@@ -96,7 +107,7 @@ function draw() {
         ctx.fillText('Game over', canvas.width / 2, canvas.height / 2 - 20);
 
         ctx.font = '24px Arial';
-        ctx.fillText('Счёт: ' + score + ' (Enter - new Game)', canvas.width / 2, canvas.height / 2 + 20);
+        ctx.fillText('Your score: ' + score + ' (Enter - new Game)', canvas.width / 2, canvas.height / 2 + 20);
     }
 
 }
