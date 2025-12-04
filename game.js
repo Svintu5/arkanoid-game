@@ -4,7 +4,7 @@ const scoreEl = document.getElementById('score');
 const livesEl = document.getElementById('lives');
 
 const ballImg = new Image();
-ballImg.src = 'ball.png';
+ballImg.src = 'ball.png';   // файл ball.png лежит рядом с game.js
 
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
@@ -13,7 +13,6 @@ let bricks = [];
 let score = 0;
 let lives = 3;
 let gameRunning = false;
-let gameStatus = 'playing'; // 'playing' | 'win' | 'lose'
 
 // Создаём кирпичи (5 рядов по 10)
 function initBricks() {
@@ -75,17 +74,15 @@ function draw() {
     scoreEl.textContent = score;
     livesEl.textContent = lives;
 
-    // Сообщение об окончании игры (проигрыш или победа)
-    if (!gameRunning && gameStatus !== 'playing') {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    // Сообщение об окончании игры (проигрыш)
+    if (!gameRunning && lives <= 0) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = '#fff';
         ctx.font = '32px Arial';
         ctx.textAlign = 'center';
-
-        const text = (gameStatus === 'lose') ? 'Game over' : 'You win!';
-        ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 20);
+        ctx.fillText('Game over', canvas.width / 2, canvas.height / 2 - 20);
 
         ctx.font = '24px Arial';
         ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
@@ -95,13 +92,11 @@ function draw() {
 // Игровой цикл
 function gameLoop() {
     if (!gameRunning) {
-        // дорисовать финальный кадр с оверлеем
+        // Рисуем финальный кадр (с оверлеем, если жизней нет)
         draw();
         return;
     }
-    
-    draw();
-      
+
     // Движение ракетки
     if (keys[37] && paddle.x > 0) paddle.x -= paddle.speed; // ←
     if (keys[39] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed; // →
@@ -120,16 +115,12 @@ function gameLoop() {
         ball.dy = -ball.dy;
     }
 
-    // Выпадение за нижнюю границу
+    // Выпадение вниз
     if (ball.y - ball.radius > canvas.height) {
-        if (lives > 0) {
-            lives--;
-        }
+        lives--;
         if (lives <= 0) {
-            gameRunning = false;
-            gameStatus = 'lose';
+            gameRunning = false; // draw покажет Game over
         } else {
-            // сброс шарика и ракетки
             ball.x = canvas.width / 2;
             ball.y = canvas.height - 60;
             ball.dx = 4;
@@ -167,21 +158,15 @@ function gameLoop() {
         }
     }
 
-    // Победа — все кирпичи уничтожены
-    const hasBricks = bricks.some(b => b.status === 1);
-    if (!hasBricks) {
-        gameRunning = false;
-        gameStatus = 'win';
-    }
-    
+    draw();
     requestAnimationFrame(gameLoop);
 }
 
 // Старт игры (Enter)
 window.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) { // Enter
-        if (!gameRunning && gameStatus !== 'playing') {
-            // рестарт
+        if (!gameRunning && lives <= 0) {
+            // рестарт после проигрыша
             score = 0;
             lives = 3;
             ball.x = canvas.width / 2;
@@ -190,7 +175,6 @@ window.addEventListener('keydown', (e) => {
             ball.dy = -4;
             paddle.x = (canvas.width - paddle.width) / 2;
             initBricks();
-            gameStatus = 'playing';
         }
         gameRunning = true;
         gameLoop();
