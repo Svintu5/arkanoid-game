@@ -442,7 +442,8 @@ function saveName() {
     localStorage.setItem('playerName', name);
     document.getElementById('nameInput').style.display = 'none';
     playerName = name;
-    }
+}
+
 function handleNameInputKey(e) {
     if (e.key === 'Enter') {
         e.preventDefault();
