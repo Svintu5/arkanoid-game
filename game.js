@@ -82,7 +82,7 @@ function draw() {
         ctx.font = '32px Arial';
         ctx.textAlign = 'center';
 
-        const text = (lives <= 0) ? 'Игра окончена' : 'Победа!';
+        const text = (lives <= 0) ? 'Game over' : 'You win!';
         ctx.fillText(text, canvas.width / 2, canvas.height / 2 - 20);
 
         ctx.font = '24px Arial';
