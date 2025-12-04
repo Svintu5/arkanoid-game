@@ -2,6 +2,8 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
 const livesEl = document.getElementById('lives');
+const ballImg = new Image();
+ballImg.src = 'ball.png';
 
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
@@ -44,11 +46,22 @@ function draw() {
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
     
     // Шарик
+if (ballImg.complete) {
+    ctx.drawImage(
+        ballImg,
+        ball.x - ball.radius,
+        ball.y - ball.radius,
+        ball.radius * 2,
+        ball.radius * 2
+    );
+} else {
+    // запасной вариант — круг, пока картинка не загрузилась
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
     ctx.fillStyle = '#ff0';
     ctx.fill();
     ctx.closePath();
+}
     
     // Кирпичи
     bricks.forEach(brick => {
@@ -67,7 +80,7 @@ function gameLoop() {
     if (!gameRunning) return;
     
     draw();
-    
+      
     // Движение ракетки
     if (keys[37] && paddle.x > 0) paddle.x -= paddle.speed; // ←
     if (keys[39] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed; // →
