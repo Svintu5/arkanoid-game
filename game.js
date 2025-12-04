@@ -45,7 +45,7 @@ function initBricks() {
 
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 18; col++) {
-            const type = row; // 0 = верхний, 5 = нижний
+            const type = row;
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
                 y: row * (brickH + 6) + offsetY,
@@ -116,7 +116,6 @@ function draw() {
     if (!gameRunning && lives > 0 && score === 0) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         ctx.fillStyle = '#fff';
         ctx.font = '32px Arial';
         ctx.textAlign = 'center';
@@ -127,12 +126,10 @@ function draw() {
     if (!gameRunning && lives <= 0) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         ctx.fillStyle = '#fff';
         ctx.font = '32px Arial';
         ctx.textAlign = 'center';
         ctx.fillText('Game over', canvas.width / 2, canvas.height / 2 - 20);
-
         ctx.font = '24px Arial';
         ctx.fillText('Your score: ' + score + ' (Enter - new Game)', canvas.width / 2, canvas.height / 2 + 20);
     }
@@ -141,14 +138,8 @@ function draw() {
 // Игровой цикл
 function gameLoop() {
     if (!gameRunning) {
-        return; // просто выходим, renderLoop продолжит рисовать
+        return;
     }
-
-    // ... остальной код gameLoop без изменений
-
-    draw();
-    requestAnimationFrame(gameLoop);
-}
 
     // Движение ракетки
     if (keys[37] && paddle.x > 0) paddle.x -= paddle.speed;
@@ -224,9 +215,8 @@ function gameLoop() {
 
 // Старт игры (Enter)
 window.addEventListener('keydown', (e) => {
-    if (e.keyCode === 13) { // Enter
+    if (e.keyCode === 13) {
         if (!gameRunning && lives <= 0) {
-            // рестарт после проигрыша
             score = 0;
             lives = 3;
             ball.x = canvas.width / 2;
@@ -243,7 +233,7 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// Постоянный цикл отрисовки (даже до старта)
+// Постоянный цикл отрисовки
 function renderLoop() {
     draw();
     requestAnimationFrame(renderLoop);
