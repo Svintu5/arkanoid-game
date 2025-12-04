@@ -21,7 +21,7 @@ function initBricks() {
     const offsetX = 10;
     const offsetY = 40;
 
-    for (let row = 0; row < 5; row++) {
+    for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 27; col++) { // можно больше колонок
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
