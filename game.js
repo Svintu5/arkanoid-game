@@ -6,6 +6,14 @@ const livesEl = document.getElementById('lives');
 const ballImg = new Image();
 ballImg.src = 'ball.png';   // файл ball.png лежит рядом с game.js
 
+const brickImages = [
+    Object.assign(new Image(), { src: 'brick1.png' }), // верхний ряд
+    Object.assign(new Image(), { src: 'brick2.png' }),
+    Object.assign(new Image(), { src: 'brick3.png' }),
+    Object.assign(new Image(), { src: 'brick4.png' }),
+    Object.assign(new Image(), { src: 'brick5.png' })  
+    Object.assign(new Image(), { src: 'brick6.png' })  // нижний ряд
+
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
 let ball = { x: 400, y: 500, radius: 8, dx: 4, dy: -4 };
@@ -16,24 +24,26 @@ let gameRunning = false;
 
 function initBricks() {
     bricks = [];
-    const brickW = 25;  // было 75
-    const brickH = 25;   // было 20
+    const brickW = 25;
+    const brickH = 25;
     const offsetX = 10;
     const offsetY = 40;
 
     for (let row = 0; row < 6; row++) {
-        for (let col = 0; col < 27; col++) { // можно больше колонок
+        for (let col = 0; col < 27; col++) {
+            const type = row; // 0 = верхний, 5 = нижний
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
                 y: row * (brickH + 6) + offsetY,
                 width: brickW,
                 height: brickH,
                 status: 1,
-                color: `hsl(${row * 40}, 70%, 50%)`
+                type: type
             });
         }
     }
 }
+
 
 initBricks();
 
@@ -67,18 +77,16 @@ function draw() {
         ctx.closePath();
     }
     
-// Кирпичи как кружки
+// Кирпичи как картинки
 bricks.forEach(brick => {
     if (brick.status === 1) {
-        const cx = brick.x + brick.width / 2;
-        const cy = brick.y + brick.height / 2;
-        const r  = Math.min(brick.width, brick.height) / 2;
-
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.fillStyle = brick.color;
-        ctx.fill();
-        ctx.closePath();
+        const img = brickImages[brick.type]; // 0..5
+        if (img.complete) {
+            ctx.drawImage(img, brick.x, brick.y, brick.width, brick.height);
+        } else {
+            ctx.fillStyle = '#888';
+            ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+        }
     }
 });
     
