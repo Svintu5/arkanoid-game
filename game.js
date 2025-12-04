@@ -96,7 +96,7 @@ function draw() {
         ctx.fillText('Game over', canvas.width / 2, canvas.height / 2 - 20);
 
         ctx.font = '24px Arial';
-        ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
+        ctx.fillText('Счёт: ' + score + ' (Enter - new Game)', canvas.width / 2, canvas.height / 2 + 20);
     }
 
 }
@@ -191,4 +191,8 @@ window.addEventListener('keydown', (e) => {
         gameRunning = true;
         gameLoop();
     }
+});
+
+// Первый кадр до старта
+draw();
 });
