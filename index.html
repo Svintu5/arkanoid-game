@@ -23,14 +23,24 @@
             background: #000; 
         }
         #nameInput { 
-            position: absolute; 
-            top: 30%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            color: white; 
-            text-align: center; 
-            display: none; 
-            font-family: 'Switzer', Arial;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    
+    /* Тёмный прямоугольный фон под формой */
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px 40px;
+    border-radius: 16px;
+    border: 2px solid #cc3da4;
+    box-shadow: 0 0 30px rgba(204, 61, 164, 0.7);
+
+    color: white;
+    text-align: center;
+    display: none;
+    font-family: 'Switzer', Arial, sans-serif;
+}
         }
         #nameInput input { 
             font-family: 'Switzer', Arial; 
