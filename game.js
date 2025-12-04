@@ -80,6 +80,11 @@ function initBricks() {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 18; col++) {
             const type = row;
+            let hits = 1;  // по умолчанию один удар
+
+            if (row === 4) hits = 2;  // предпоследний ряд — 2 удара
+            if (row === 5) hits = 3;  // последний ряд — 3 удара
+
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
                 y: row * (brickH + 6) + offsetY,
@@ -87,6 +92,7 @@ function initBricks() {
                 height: brickH,
                 status: 1,
                 type: type,
+                hits: hits,
             });
         }
     }
@@ -402,19 +408,22 @@ function gameLoop() {
     for (let i = 0; i < bricks.length; i++) {
         const brick = bricks[i];
         if (
-            brick.status === 1 &&
-            ball.x > brick.x &&
-            ball.x < brick.x + brick.width &&
-            ball.y - ball.radius < brick.y + brick.height &&
-            ball.y + ball.radius > brick.y
-        ) {
-            brick.status = 0;
-            score += 10;
-            ball.dy = -ball.dy;
-            hitSound.currentTime = 0;
-            hitSound.play();
-            break;
-        }
+    brick.status === 1 &&
+    ball.x > brick.x &&
+    ball.x < brick.x + brick.width &&
+    ball.y - ball.radius < brick.y + brick.height &&
+    ball.y + ball.radius > brick.y
+) {
+    brick.hits -= 1;          // снижаем счётчик ударов
+    if (brick.hits <= 0) {
+        brick.status = 0;     // уничтожаем кирпич, когда удары закончились
+        score += 10;
+    }
+    ball.dy = -ball.dy;
+    hitSound.currentTime = 0;
+    hitSound.play();
+    break;
+}
     }
 
     draw();
