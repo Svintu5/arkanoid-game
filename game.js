@@ -143,9 +143,7 @@ ctx.shadowColor = '#cc3da4';
 ctx.shadowBlur = 10;
 
 ctx.fillText('Score: ' + score, 10, 10);
-ctx.fillText('Lives: ' + lives, 10, 40);
 
-ctx.shadowBlur = 20; // убрать свечения дальше
 
 // жизни в правый верхний угол
 ctx.font = '20px Switzer, Arial';
@@ -155,10 +153,9 @@ ctx.textBaseline = 'top';
 ctx.shadowColor = '#cc3da4';
 ctx.shadowBlur = 10;
 
-ctx.fillText('Score: ' + score, 10, 10);
 ctx.fillText('Lives: ' + lives, 10, 40);
 
-ctx.shadowBlur = 20; // убрать свечения дальше
+ctx.shadowBlur = 0; // убрать свечения дальше
 
     
     // Сообщение перед стартом
