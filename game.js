@@ -163,16 +163,20 @@ if (!gameRunning && lives > 0 && score === 0) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#cc3da4'; // основной цвет
+    ctx.fillStyle = '#cc3da4';
     ctx.font = 'bold 48px Switzer, Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = '#cc3da4'; // свечение
+    ctx.shadowColor = '#cc3da4';
     ctx.shadowBlur = 20;
     ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
     
     ctx.shadowBlur = 0;
+
+    ctx.font = 'bold 26px Switzer, Arial';
+    ctx.fillText('Left + Right to move', canvas.width / 2, canvas.height / 2 + 50);
 }
+
     // Сообщение Game Over
 if (!gameRunning && lives <= 0) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
