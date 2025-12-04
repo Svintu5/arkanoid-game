@@ -195,4 +195,3 @@ window.addEventListener('keydown', (e) => {
 
 // Первый кадр до старта
 draw();
-});
