@@ -19,7 +19,10 @@ const backImg = new Image();
 backImg.src = 'back.png';
 
 const hitSound = new Audio('hit.mp3');
+const lostSound = new Audio('lost.mp3');
+
 hitSound.volume = 0.5;
+lostSound.volume = 0.5;
 
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
@@ -160,19 +163,24 @@ function gameLoop() {
         ball.dy = -ball.dy;
     }
 
-    // Выпадение вниз
-    if (ball.y - ball.radius > canvas.height) {
-        lives--;
-        if (lives <= 0) {
-            gameRunning = false; // draw покажет Game over
-        } else {
-            ball.x = canvas.width / 2;
-            ball.y = canvas.height - 60;
-            ball.dx = 4;
-            ball.dy = -4;
-            paddle.x = (canvas.width - paddle.width) / 2;
-        }
+// Выпадение вниз
+if (ball.y - ball.radius > canvas.height) {
+    lives--;
+
+    // звук потери мяча
+    lostSound.currentTime = 0;
+    lostSound.play();
+
+    if (lives <= 0) {
+        gameRunning = false; // draw покажет Game over
+    } else {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height - 60;
+        ball.dx = 4;
+        ball.dy = -4;
+        paddle.x = (canvas.width - paddle.width) / 2;
     }
+}
 
 // Коллизия с ракеткой
 if (
