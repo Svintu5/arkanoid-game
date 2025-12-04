@@ -15,6 +15,9 @@ const brickImages = [
     Object.assign(new Image(), { src: 'brick6.png' })  // нижний ряд
 ]
 
+const backImg = new Image();
+backImg.src = 'back.png';
+
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
 let ball = { x: 400, y: 500, radius: 8, dx: 4, dy: -4 };
@@ -55,7 +58,14 @@ window.addEventListener('keyup', (e) => keys[e.keyCode] = false);
 
 // Отрисовка
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Фон
+    if (backImg.complete) {
+        ctx.drawImage(backImg, 0, 0, canvas.width, canvas.height);
+    } else {
+        // запасной вариант — просто чёрный фон
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
     
     // Ракетка
     ctx.fillStyle = '#fff';
