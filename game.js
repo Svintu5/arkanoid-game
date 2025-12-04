@@ -1,7 +1,5 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const scoreEl = document.getElementById('score');
-const livesEl = document.getElementById('lives');
 
 const ballImg = new Image();
 ballImg.src = 'ball.png';
@@ -31,31 +29,11 @@ finishSound.volume = 0.4;
 let playerName = localStorage.getItem('playerName') || 'Игрок';
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
-function savePlayerName(name) {
-    playerName = name.trim() || 'Игрок';
-    localStorage.setItem('playerName', playerName);
-}
-
 function addScoreToLeaderboard(score) {
     leaderboard.push({ name: playerName, score: score });
     leaderboard.sort((a, b) => b.score - a.score); // по убыванию
     leaderboard = leaderboard.slice(0, 10); // топ 10
     localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-}
-
-function promptPlayerName() {
-    const nameContainer = document.getElementById('nameInput');
-    nameContainer.style.display = 'block';
-}
-
-function saveName() {
-    const input = document.getElementById('playerName');
-    if (input.value.trim()) {
-        playerName = input.value.trim();
-        localStorage.setItem('playerName', playerName);
-        document.getElementById('nameInput').style.display = 'none';
-        startGame();
-    }
 }
 
 function startGame() {
