@@ -74,7 +74,13 @@
     
     <!-- Поле ввода имени -->
     <div id="nameInput">
-        <input type="text" id="playerName" placeholder="Genfren Name" maxlength="12">
+<input
+    type="text"
+    id="playerName"
+    placeholder="Genfren Name"
+    maxlength="12"
+    onkeydown="handleNameInputKey(event)"
+>
         <br><br>
         <button onclick="saveName()">LFGEN!</button>
     </div>
