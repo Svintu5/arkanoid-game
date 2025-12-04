@@ -1,11 +1,5 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-if (!canvas || !ctx) {
-    console.error('Canvas не найден!');
-    
-} else {
-    canvas.width = 800;
-    canvas.height = 600;
 
 const ballImg = new Image();
 ballImg.src = 'ball.png';
@@ -342,7 +336,7 @@ if (showNameInput) {
     document.getElementById('nameInput').style.display = 'block';
 }
 
-// Функции для имени и лидерборда
+// Функция сохранения имени игрока
 function saveName() {
     const input = document.getElementById('playerName');
     const name = input.value.trim() || 'Player Name';
@@ -351,7 +345,7 @@ function saveName() {
     playerName = name;
 }
 
-// Постоянный цикл отрисовки
+// Цикл отрисовки
 function renderLoop() {
     draw();
     requestAnimationFrame(renderLoop);
