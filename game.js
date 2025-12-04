@@ -350,6 +350,13 @@ function gameLoop() {
         return;
     }
 
+    // ОТЛАДКА hits — ПОСЛЕ ТЕСТА УДАЛИ
+    if (Math.random() < 0.01) {  // примерно раз в 100 кадров
+        console.log('Row 0 hits:', bricks[0]?.hits);
+        console.log('Row 4 hits:', bricks[72]?.hits);
+        console.log('Row 5 hits:', bricks[90]?.hits);
+    }
+    
     // Победа: все кирпичи уничтожены
     if (bricks.every(brick => brick.status === 0)) {
         gameRunning = false;
