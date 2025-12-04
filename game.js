@@ -33,6 +33,18 @@ lostSound.volume = 0.1;
 startSound.volume = 0.4;
 finishSound.volume = 0.4;
 
+let soundOn = true;
+
+function updateSoundVolume() {
+    const v = soundOn ? 1 : 0;
+    hitSound.volume = 0.3 * v;
+    lostSound.volume = 0.1 * v;
+    startSound.volume = 0.4 * v;
+    finishSound.volume = 0.4 * v;
+}
+
+updateSoundVolume();
+
 let playerName = localStorage.getItem('playerName') || 'Игрок';
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
@@ -306,6 +318,20 @@ ctx.shadowBlur = 0;
     y2: canvas.height - 10
     };
     }
+    // Иконка звука (нота) в левом нижнем углу
+    const iconX = 30;
+    const iconY = canvas.height - 30;
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '24px Switzer, Arial';
+    ctx.fillStyle = soundOn ? '#cc3da4' : '#666666';
+    ctx.shadowColor = soundOn ? '#cc3da4' : 'transparent';
+    ctx.shadowBlur = soundOn ? 10 : 0;
+    ctx.fillText(soundOn ? '♪' : '🔇', iconX, iconY);
+    ctx.restore();
+}
+   
 } // ← конец draw()
 
 // Игровой цикл
@@ -459,14 +485,28 @@ canvas.addEventListener('click', (e) => {
 
     const hb = changeNameHitbox;
 
+    // Клик по Change Name
     if (
-        !gameRunning &&                 // только на экранах Game Over / You Win
+        !gameRunning &&
         x >= hb.x1 && x <= hb.x2 &&
         y >= hb.y1 && y <= hb.y2
     ) {
         document.getElementById('nameInput').style.display = 'block';
+        return;
+    }
+
+    // Клик по иконке звука (нота в левом нижнем углу)
+    const iconX1 = 10;
+    const iconX2 = 50;
+    const iconY1 = canvas.height - 50;
+    const iconY2 = canvas.height - 10;
+
+    if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
+        soundOn = !soundOn;
+        updateSoundVolume();
     }
 });
+
 
 // Цикл отрисовки
 function renderLoop() {
