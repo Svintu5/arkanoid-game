@@ -153,29 +153,23 @@ function draw() {
         }
     });
 
-    // Счёт в левый верхний угол
+    // Счёт
     ctx.font = 'bold 24px Switzer, Arial';
-    ctx.fillStyle = '#cc3da4'; // основной цвет
+    ctx.fillStyle = '#cc3da4';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.shadowColor = '#cc3da4';
     ctx.shadowBlur = 10;
-
     ctx.fillText('Score: ' + score, 10, 10);
 
-    // Жизни в правый верхний угол
+    // Жизни
     ctx.font = 'bold 24px Switzer, Arial';
-    ctx.fillStyle = '#cc3da4'; // основной цвет
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 10;
-
+    ctx.fillStyle = '#cc3da4';
     ctx.fillText('Lives: ' + lives, 700, 10);
 
-    ctx.shadowBlur = 0; // убрать свечения дальше
+    ctx.shadowBlur = 0;
 
-    // Сообщение перед стартом
+    // Стартовый экран
     if (!gameRunning && lives > 0 && score === 0) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -189,55 +183,55 @@ function draw() {
         ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
 
         ctx.shadowBlur = 0;
-
         ctx.font = 'bold 26px Switzer, Arial';
         ctx.fillText('Left + Right to move', canvas.width / 2, canvas.height / 2 + 50);
     }
 
-    // Сообщение Game Over
-if (!gameRunning && lives <= 0) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Game Over
+    if (!gameRunning && lives <= 0) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#cc3da4';
-    ctx.font = 'bold 64px Switzer, Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 30;
-    ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 40);
+        ctx.fillStyle = '#cc3da4';
+        ctx.font = 'bold 64px Switzer, Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#cc3da4';
+        ctx.shadowBlur = 30;
+        ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 40);
 
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 32px Switzer, Arial';
-    ctx.fillText('Your score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 32px Switzer, Arial';
+        ctx.fillText('Your score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
 
-    ctx.fillStyle = '#cc3da4';
-    ctx.font = '32px Switzer, Arial';
-    ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
+        ctx.fillStyle = '#cc3da4';
+        ctx.font = '32px Switzer, Arial';
+        ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
 
-    ctx.font = '20px Switzer, Arial';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('Top players:', canvas.width / 2, canvas.height / 2 + 120);
+        ctx.font = '20px Switzer, Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('Top players:', canvas.width / 2, canvas.height / 2 + 120);
 
-    leaderboard.forEach((entry, i) => {
-        const y = canvas.height / 2 + 150 + i * 25;
-        ctx.fillStyle = i === 0 ? '#ffd700' : '#cc3da4';
-        ctx.font = i === 0 ? 'bold 24px Switzer, Arial' : '20px Switzer, Arial';
-        ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
-    });
+        leaderboard.forEach((entry, i) => {
+            const y = canvas.height / 2 + 150 + i * 25;
+            ctx.fillStyle = i === 0 ? '#ffd700' : '#cc3da4';
+            ctx.font = i === 0 ? 'bold 24px Switzer, Arial' : '20px Switzer, Arial';
+            ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
+        });
 
-    // Надпись Change Name в правом нижнем углу
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'bottom';
-    ctx.font = '18px Switzer, Arial';
-    ctx.fillStyle = '#cc3da4';
-    ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 10;
-    ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
-    ctx.shadowBlur = 0;
-}
-    // Экран победы
+        // Change Name (правый нижний угол)
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'bottom';
+        ctx.font = '18px Switzer, Arial';
+        ctx.fillStyle = '#cc3da4';
+        ctx.shadowColor = '#cc3da4';
+        ctx.shadowBlur = 10;
+        ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
+        ctx.shadowBlur = 0;
+    }
+
+    // You Win
     if (!gameRunning && lives > 0 && bricks.every(brick => brick.status === 0)) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -259,7 +253,6 @@ if (!gameRunning && lives <= 0) {
         ctx.font = '32px Switzer, Arial';
         ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
 
-        // Топ игроков при победе
         ctx.font = '20px Switzer, Arial';
         ctx.fillStyle = '#ffffff';
         ctx.fillText('Top players:', canvas.width / 2, canvas.height / 2 + 120);
@@ -270,16 +263,16 @@ if (!gameRunning && lives <= 0) {
             ctx.font = i === 0 ? 'bold 24px Switzer, Arial' : '20px Switzer, Arial';
             ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
         });
-        // Надпись Change Name в правом нижнем углу
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'bottom';
-    ctx.font = '18px Switzer, Arial';
-    ctx.fillStyle = '#cc3da4';
-    ctx.shadowColor = '#cc3da4';
-    ctx.shadowBlur = 10;
-    ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
-    ctx.shadowBlur = 0;
-}
+
+        // Change Name (правый нижний угол)
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'bottom';
+        ctx.font = '18px Switzer, Arial';
+        ctx.fillStyle = '#cc3da4';
+        ctx.shadowColor = '#cc3da4';
+        ctx.shadowBlur = 10;
+        ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
+        ctx.shadowBlur = 0;
     }
 } // ← конец draw()
 
