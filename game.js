@@ -13,6 +13,7 @@ const brickImages = [
     Object.assign(new Image(), { src: 'brick4.png' }),
     Object.assign(new Image(), { src: 'brick5.png' }),  
     Object.assign(new Image(), { src: 'brick6.png' })  // нижний ряд
+]
 
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
