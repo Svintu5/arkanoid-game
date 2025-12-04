@@ -80,12 +80,13 @@ function initBricks() {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 18; col++) {
             let hits;
-            if (row === 4) {
-                hits = 2;  // предпоследний ряд
-            } else if (row === 5) {
-                hits = 3;  // последний ряд
+            
+            if (row === 0) {
+                hits = 3;  // первый сверху
+            } else if (row === 1) {
+                hits = 2;  // второй сверху  
             } else {
-                hits = 1;  // первые 4 ряда
+                hits = 1;  // остальные ряды (3,4,5)
             }
 
             bricks.push({
@@ -100,8 +101,6 @@ function initBricks() {
         }
     }
 }
-
-
 
 initBricks();
 
@@ -348,13 +347,6 @@ ctx.shadowBlur = 0;
 function gameLoop() {
     if (!gameRunning) {
         return;
-    }
-
-    // ОТЛАДКА hits — ПОСЛЕ ТЕСТА УДАЛИ
-    if (Math.random() < 0.01) {  // примерно раз в 100 кадров
-        console.log('Row 0 hits:', bricks[0]?.hits);
-        console.log('Row 4 hits:', bricks[72]?.hits);
-        console.log('Row 5 hits:', bricks[90]?.hits);
     }
     
     // Победа: все кирпичи уничтожены
