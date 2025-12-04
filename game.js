@@ -134,7 +134,7 @@ ctx.shadowColor = 'transparent';
         }
     });
     
-// Счёт и жизни в левый верхний угол
+// Счёт в левый верхний угол
 ctx.font = '20px Switzer, Arial';
 ctx.fillStyle = '#cc3da4'; // основной цвет
 ctx.textAlign = 'left';
@@ -145,8 +145,22 @@ ctx.shadowBlur = 10;
 ctx.fillText('Score: ' + score, 10, 10);
 ctx.fillText('Lives: ' + lives, 10, 40);
 
-ctx.shadowBlur = 0; // убрать свечения дальше
+ctx.shadowBlur = 20; // убрать свечения дальше
 
+// жизни в правый верхний угол
+ctx.font = '20px Switzer, Arial';
+ctx.fillStyle = '#cc3da4'; // основной цвет
+ctx.textAlign = 'right';
+ctx.textBaseline = 'top';
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 10;
+
+ctx.fillText('Score: ' + score, 10, 10);
+ctx.fillText('Lives: ' + lives, 10, 40);
+
+ctx.shadowBlur = 20; // убрать свечения дальше
+
+    
     // Сообщение перед стартом
 if (!gameRunning && lives > 0 && score === 0) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
