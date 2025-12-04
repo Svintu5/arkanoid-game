@@ -249,7 +249,18 @@ if (!gameRunning && lives > 0 && bricks.every(brick => brick.status === 0)) {
     ctx.fillStyle = '#cc3da4';
     ctx.font = '32px Switzer, Arial';
     ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
-}
+
+    // Топ игроков при победе
+    ctx.font = '20px Switzer, Arial';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('Top players:', canvas.width / 2, canvas.height / 2 + 120);
+
+    leaderboard.forEach((entry, i) => {
+        const y = canvas.height / 2 + 150 + i * 25;
+        ctx.fillStyle = i === 0 ? '#ffd700' : '#cc3da4';
+        ctx.font = i === 0 ? 'bold 24px Switzer, Arial' : '20px Switzer, Arial';
+        ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
+    });
 }
 
 // Игровой цикл
