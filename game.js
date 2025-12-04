@@ -351,6 +351,22 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+let showNameInput = !localStorage.getItem('playerName');
+
+// Показать поле ввода имени при первом запуске
+if (showNameInput) {
+    document.getElementById('nameInput').style.display = 'block';
+}
+
+// Функции для имени и лидерборда
+function saveName() {
+    const input = document.getElementById('playerName');
+    const name = input.value.trim() || 'Player Name';
+    localStorage.setItem('playerName', name);
+    document.getElementById('nameInput').style.display = 'none';
+    playerName = name;
+}
+
 // Постоянный цикл отрисовки
 function renderLoop() {
     draw();
