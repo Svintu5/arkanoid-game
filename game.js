@@ -134,8 +134,18 @@ ctx.shadowColor = 'transparent';
         }
     });
     
-    scoreEl.textContent = score;
-    livesEl.textContent = lives;
+// Счёт и жизни в левый верхний угол
+ctx.font = '20px Switzer, Arial';
+ctx.fillStyle = '#cc3da4'; // основной цвет
+ctx.textAlign = 'left';
+ctx.textBaseline = 'top';
+ctx.shadowColor = '#cc3da4';
+ctx.shadowBlur = 10;
+
+ctx.fillText('Score: ' + score, 10, 10);
+ctx.fillText('Lives: ' + lives, 10, 40);
+
+ctx.shadowBlur = 0; // убрать свечения дальше
 
     // Сообщение перед стартом
 if (!gameRunning && lives > 0 && score === 0) {
