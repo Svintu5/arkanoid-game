@@ -98,4 +98,81 @@ function gameLoop() {
     if (keys[39] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed; // →
     
     // Движение шарика
-    ball.x
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+
+    // Отскок от вертикальных стен
+    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        ball.dx = -ball.dx;
+    }
+
+    // Отскок от верхней границы
+    if (ball.y - ball.radius < 0) {
+        ball.dy = -ball.dy;
+    }
+
+    // Выпадение за нижнюю границу
+    if (ball.y - ball.radius > canvas.height) {
+        lives--;
+        if (lives <= 0) {
+            gameRunning = false; // останавливаем игру, draw покажет оверлей
+        } else {
+            // сброс шарика и ракетки
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - 60;
+            ball.dx = 4;
+            ball.dy = -4;
+            paddle.x = (canvas.width - paddle.width) / 2;
+        }
+    }
+
+    // Коллизия с ракеткой
+    if (
+        ball.y + ball.radius > paddle.y &&
+        ball.y - ball.radius < paddle.y + paddle.height &&
+        ball.x > paddle.x &&
+        ball.x < paddle.x + paddle.width
+    ) {
+        ball.dy = -Math.abs(ball.dy);
+        const hitPos = ball.x - (paddle.x + paddle.width / 2);
+        ball.dx = hitPos * 0.15;
+    }
+
+    // Коллизия с кирпичами
+    for (let i = 0; i < bricks.length; i++) {
+        const brick = bricks[i];
+        if (
+            brick.status === 1 &&
+            ball.x > brick.x &&
+            ball.x < brick.x + brick.width &&
+            ball.y - ball.radius < brick.y + brick.height &&
+            ball.y + ball.radius > brick.y
+        ) {
+            brick.status = 0;
+            score += 10;
+            ball.dy = -ball.dy;
+            break;
+        }
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+
+// Старт игры (Enter)
+window.addEventListener('keydown', (e) => {
+    if (e.keyCode === 13) { // Enter
+        if (!gameRunning) {
+            // рестарт
+            score = 0;
+            lives = 3;
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - 60;
+            ball.dx = 4;
+            ball.dy = -4;
+            paddle.x = (canvas.width - paddle.width) / 2;
+            initBricks();
+        }
+        gameRunning = true;
+        gameLoop();
+    }
+});
