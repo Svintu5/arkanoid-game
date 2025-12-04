@@ -141,9 +141,14 @@ function draw() {
 // Игровой цикл
 function gameLoop() {
     if (!gameRunning) {
-        draw();
-        return;
+        return; // просто выходим, renderLoop продолжит рисовать
     }
+
+    // ... остальной код gameLoop без изменений
+
+    draw();
+    requestAnimationFrame(gameLoop);
+}
 
     // Движение ракетки
     if (keys[37] && paddle.x > 0) paddle.x -= paddle.speed;
@@ -238,5 +243,10 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// Первый кадр до старта
-draw();
+// Постоянный цикл отрисовки (даже до старта)
+function renderLoop() {
+    draw();
+    requestAnimationFrame(renderLoop);
+}
+
+renderLoop();
