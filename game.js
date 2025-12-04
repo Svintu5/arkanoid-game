@@ -228,11 +228,42 @@ function draw() {
             ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
         });
     }
+    // Экран победы
+if (!gameRunning && lives > 0 && bricks.every(brick => brick.status === 0)) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#cc3da4';
+    ctx.font = 'bold 64px Switzer, Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = '#cc3da4';
+    ctx.shadowBlur = 30;
+    ctx.fillText('You Win!', canvas.width / 2, canvas.height / 2 - 40);
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 32px Switzer, Arial';
+    ctx.fillText('Your score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+
+    ctx.fillStyle = '#cc3da4';
+    ctx.font = '32px Switzer, Arial';
+    ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
+}
 }
 
 // Игровой цикл
 function gameLoop() {
     if (!gameRunning) {
+        return;
+    }
+
+    // Победа: все кирпичи уничтожены
+    if (bricks.every(brick => brick.status === 0)) {
+        gameRunning = false;
+        finishSound.currentTime = 0;
+        finishSound.play();
+        addScoreToLeaderboard(score);
         return;
     }
 
