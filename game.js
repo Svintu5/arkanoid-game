@@ -31,7 +31,7 @@ function initBricks() {
     const offsetY = 40;
 
     for (let row = 0; row < 6; row++) {
-        for (let col = 0; col < 27; col++) {
+        for (let col = 0; col < 18; col++) {
             const type = row; // 0 = верхний, 5 = нижний
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
