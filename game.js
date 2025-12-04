@@ -6,7 +6,6 @@ if (!canvas || !ctx) {
 } else {
     canvas.width = 800;
     canvas.height = 600;
-}
 
 const ballImg = new Image();
 ballImg.src = 'ball.png';
