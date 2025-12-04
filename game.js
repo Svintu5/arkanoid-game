@@ -171,7 +171,7 @@ ctx.fillText('Score: ' + score, 10, 10);
 
 // Имя игрока по центру сверху
 ctx.font = '20px Switzer, Arial';
-ctx.fillStyle = '#cc3da4';
+ctx.fillStyle = '#ffffff';
 ctx.textAlign = 'center';
 ctx.textBaseline = 'top';
 ctx.shadowColor = '#cc3da4';
