@@ -102,9 +102,10 @@ function gameLoop() {
     // Выпадение за нижнюю границу
     if (ball.y - ball.radius > canvas.height) {
         lives--;
-        if (lives <= 0) {
-            alert('Игра окончена! Счёт: ' + score);
-            document.location.reload();
+            if (lives <= 0) {
+            gameRunning = false; // останавливаем цикл
+            }
+
         } else {
             // сброс шарика и ракетки
             ball.x = canvas.width / 2;
@@ -143,14 +144,38 @@ function gameLoop() {
             break;
         }
     }
+
+    // Сообщение об окончании игры
+        if (!gameRunning && lives <= 0) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
     
+            ctx.fillStyle = '#fff';
+            ctx.font = '32px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Игра окончена', canvas.width / 2, canvas.height / 2 - 20);
+            ctx.font = '24px Arial';
+            ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
+        }
     requestAnimationFrame(gameLoop);
 }
 
 // Старт игры (Enter)
 window.addEventListener('keydown', (e) => {
     if (e.keyCode === 13) { // Enter
+        if (!gameRunning) {
+            // рестарт
+            score = 0;
+            lives = 3;
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - 60;
+            ball.dx = 4;
+            ball.dy = -4;
+            paddle.x = (canvas.width - paddle.width) / 2;
+            initBricks();
+        }
         gameRunning = true;
         gameLoop();
     }
 });
+
