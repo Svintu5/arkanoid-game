@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Арканоид</title>
+    
+    <!-- Google Fonts Switzer -->
+    <link href="https://fonts.googleapis.com/css2?family=Switzer:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Switzer:wght@400;500;700&display=swap');
+        
         body { 
             margin: 0; 
             display: flex; 
@@ -12,18 +18,18 @@
             align-items: center; 
             min-height: 100vh; 
             background: #222; 
-            font-family: Arial; 
+            font-family: 'Switzer', Arial, sans-serif; 
         }
-        canvas { 
-            border: 2px solid #fff; 
-            background: #000; 
-        }
+        canvas { border: 2px solid #fff; background: #000; }
         .ui { 
             position: absolute; 
             top: 10px; 
             left: 10px; 
-            color: white; 
+            color: #00ff88; /* цвет счёта/жизней */
+            font-family: 'Switzer', Arial; 
+            font-weight: 500;
             font-size: 20px; 
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
         }
     </style>
 </head>
