@@ -113,26 +113,43 @@ function draw() {
     livesEl.textContent = lives;
 
     // Сообщение перед стартом
-    if (!gameRunning && lives > 0 && score === 0) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#fff';
-        ctx.font = '32px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
-    }
+if (!gameRunning && lives > 0 && score === 0) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Сообщение об окончании игры
-    if (!gameRunning && lives <= 0) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#fff';
-        ctx.font = '32px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Game over', canvas.width / 2, canvas.height / 2 - 20);
-        ctx.font = '24px Arial';
-        ctx.fillText('Your score: ' + score + ' (Enter - new Game)', canvas.width / 2, canvas.height / 2 + 20);
-    }
+    ctx.fillStyle = '#cc3da4'; // основной цвет
+    ctx.font = 'bold 48px Switzer, Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = '#cc3da4'; // свечение
+    ctx.shadowBlur = 20;
+    ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
+    
+    ctx.shadowBlur = 0;
+}
+    // Сообщение Game Over
+if (!gameRunning && lives <= 0) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#cc3da4'; // Game Over тоже #cc3da4
+    ctx.font = 'bold 64px Switzer, Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = '#cc3da4';
+    ctx.shadowBlur = 30;
+    ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2 - 40);
+    
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 32px Switzer, Arial';
+    ctx.fillText('Your score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+    
+    ctx.fillStyle = '#cc3da4'; // кнопка тоже #cc3da4
+    ctx.font = '32px Switzer, Arial';
+    ctx.fillText('Enter - New Game', canvas.width / 2, canvas.height / 2 + 70);
+}
+
 }
 
 // Игровой цикл
