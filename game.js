@@ -51,8 +51,8 @@ if (ballImg.complete) {
         ballImg,
         ball.x - ball.radius,
         ball.y - ball.radius,
-        ball.radius * 2,
-        ball.radius * 2
+        ball.radius * 10,
+        ball.radius * 10
     );
 } else {
     // запасной вариант — круг, пока картинка не загрузилась
