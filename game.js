@@ -330,7 +330,6 @@ ctx.shadowBlur = 0;
     ctx.shadowBlur = soundOn ? 10 : 0;
     ctx.fillText(soundOn ? '♪' : '🔇', iconX, iconY);
     ctx.restore();
-}
    
 } // ← конец draw()
 
