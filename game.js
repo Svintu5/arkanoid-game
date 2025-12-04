@@ -11,7 +11,7 @@ const brickImages = [
     Object.assign(new Image(), { src: 'brick2.png' }),
     Object.assign(new Image(), { src: 'brick3.png' }),
     Object.assign(new Image(), { src: 'brick4.png' }),
-    Object.assign(new Image(), { src: 'brick5.png' })  
+    Object.assign(new Image(), { src: 'brick5.png' }),  
     Object.assign(new Image(), { src: 'brick6.png' })  // нижний ряд
 
 // Игровые объекты
