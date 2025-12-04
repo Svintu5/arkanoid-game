@@ -219,7 +219,7 @@ function draw() {
         ctx.font = '20px Switzer, Arial';
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
-        ctx.fillText('Топ игроков:', canvas.width / 2, canvas.height / 2 + 120);
+        ctx.fillText('Top players:', canvas.width / 2, canvas.height / 2 + 120);
 
         leaderboard.forEach((entry, i) => {
             const y = canvas.height / 2 + 150 + i * 25;
