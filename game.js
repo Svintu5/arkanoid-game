@@ -360,6 +360,13 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+// Тест победы: клавиша P очищает все кирпичи
+window.addEventListener('keydown', (e) => {
+    if (e.keyCode === 80) { // P
+        bricks.forEach(b => b.status = 0);
+    }
+});
+
 let showNameInput = !localStorage.getItem('playerName');
 
 // Показать поле ввода имени при первом запуске
