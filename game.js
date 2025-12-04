@@ -20,9 +20,13 @@ backImg.src = 'back.png';
 
 const hitSound = new Audio('hit.mp3');
 const lostSound = new Audio('lost.mp3');
+const startSound = new Audio('start.mp3');
+const finishSound = new Audio('finish.mp3');
 
-hitSound.volume = 0.5;
-lostSound.volume = 0.5;
+hitSound.volume = 0.3;
+lostSound.volume = 0.1;
+startSound.volume = 0.4;
+finishSound.volume = 0.4;
 
 // Игровые объекты
 let paddle = { x: 350, y: 550, width: 100, height: 15, speed: 8 };
@@ -166,14 +170,15 @@ function gameLoop() {
 // Выпадение вниз
 if (ball.y - ball.radius > canvas.height) {
     lives--;
-
-    // звук потери мяча
     lostSound.currentTime = 0;
     lostSound.play();
 
     if (lives <= 0) {
-        gameRunning = false; // draw покажет Game over
+        gameRunning = false;
+        finishSound.currentTime = 0;
+        finishSound.play();
     } else {
+        // сброс позиции
         ball.x = canvas.width / 2;
         ball.y = canvas.height - 60;
         ball.dx = 4;
@@ -235,6 +240,11 @@ window.addEventListener('keydown', (e) => {
             initBricks();
         }
         gameRunning = true;
+        
+        // музыка старта
+        startSound.currentTime = 0;
+        startSound.play();
+        
         gameLoop();
     }
 });
