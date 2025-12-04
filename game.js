@@ -80,10 +80,15 @@ function initBricks() {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 18; col++) {
             const type = row;
-            let hits = 1;  // по умолчанию один удар
+            let hits;
 
-            if (row === 4) hits = 2;  // предпоследний ряд — 2 удара
-            if (row === 5) hits = 3;  // последний ряд — 3 удара
+            if (row === 4) {
+                hits = 2;  // предпоследний ряд — 2 удара
+            } else if (row === 5) {
+                hits = 3;  // последний ряд — 3 удара
+            } else {
+                hits = 1;  // первые 4 ряда — 1 удар
+            }
 
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
@@ -97,6 +102,7 @@ function initBricks() {
         }
     }
 }
+
 
 initBricks();
 
