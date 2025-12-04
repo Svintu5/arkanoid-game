@@ -1,6 +1,13 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+let changeNameHitbox = {
+    x1: canvas.width - 200,
+    x2: canvas.width - 20,
+    y1: canvas.height - 50,
+    y2: canvas.height - 10
+};
+
 const ballImg = new Image();
 ballImg.src = 'ball.png';
 
@@ -229,6 +236,12 @@ function draw() {
         ctx.shadowBlur = 10;
         ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
         ctx.shadowBlur = 0;
+        changeNameHitbox = {
+    x1: canvas.width - 200,
+    x2: canvas.width - 20,
+    y1: canvas.height - 50,
+    y2: canvas.height - 10
+    };
     }
 
     // You Win
@@ -273,6 +286,12 @@ function draw() {
         ctx.shadowBlur = 10;
         ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
         ctx.shadowBlur = 0;
+        changeNameHitbox = {
+    x1: canvas.width - 200,
+    x2: canvas.width - 20,
+    y1: canvas.height - 50,
+    y2: canvas.height - 10
+    };
     }
 } // ← конец draw()
 
@@ -411,6 +430,22 @@ function saveName() {
     document.getElementById('nameInput').style.display = 'none';
     playerName = name;
 }
+
+canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const hb = changeNameHitbox;
+
+    if (
+        !gameRunning &&                 // только на экранах Game Over / You Win
+        x >= hb.x1 && x <= hb.x2 &&
+        y >= hb.y1 && y <= hb.y2
+    ) {
+        document.getElementById('nameInput').style.display = 'block';
+    }
+});
 
 // Цикл отрисовки
 function renderLoop() {
