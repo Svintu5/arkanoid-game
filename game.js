@@ -52,8 +52,8 @@ function draw() {
             ballImg,
             ball.x - ball.radius,
             ball.y - ball.radius,
-            ball.radius * 2,
-            ball.radius * 2
+            ball.radius * 5,
+            ball.radius * 5
         );
     } else {
         ctx.beginPath();
@@ -74,6 +74,17 @@ function draw() {
     scoreEl.textContent = score;
     livesEl.textContent = lives;
 
+    // Сообщение перед стартом
+    if (!gameRunning && lives > 0 && score === 0) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#fff';
+        ctx.font = '32px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Press Enter to start', canvas.width / 2, canvas.height / 2);
+    }
+
     // Сообщение об окончании игры (проигрыш)
     if (!gameRunning && lives <= 0) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -87,6 +98,7 @@ function draw() {
         ctx.font = '24px Arial';
         ctx.fillText('Счёт: ' + score + ' (Enter — ещё раз)', canvas.width / 2, canvas.height / 2 + 20);
     }
+
 }
 
 // Игровой цикл
