@@ -17,12 +17,12 @@ let gameRunning = false;
 function initBricks() {
     bricks = [];
     const brickW = 25;  // было 75
-    const brickH = 7;   // было 20
+    const brickH = 25;   // было 20
     const offsetX = 10;
     const offsetY = 40;
 
     for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 20; col++) { // можно больше колонок
+        for (let col = 0; col < 30; col++) { // можно больше колонок
             bricks.push({
                 x: col * (brickW + 4) + offsetX,
                 y: row * (brickH + 6) + offsetY,
