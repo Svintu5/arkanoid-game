@@ -2,10 +2,11 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 if (!canvas || !ctx) {
     console.error('Canvas не найден!');
-    return;
+    
+} else {
+    canvas.width = 800;
+    canvas.height = 600;
 }
-canvas.width = 800;   // Фиксируем размер
-canvas.height = 600;
 
 const ballImg = new Image();
 ballImg.src = 'ball.png';
