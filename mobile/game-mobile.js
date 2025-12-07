@@ -111,16 +111,18 @@ window.addEventListener('keyup', (e) => (keys[e.keyCode] = false));
 
 // Тач-управление для смартфонов
 canvas.addEventListener('touchmove', (e) => {
-  e.preventDefault();
-  const rect = canvas.getBoundingClientRect();
-  const touch = e.touches[0];
-  const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const scaleX = canvas.width / rect.width; // чтобы не зависеть от CSS-скейла
+    const x = (touch.clientX - rect.left) * scaleX;
 
-  paddle.x = x - paddle.width / 2;
-  if (paddle.x < 0) paddle.x = 0;
-  if (paddle.x > canvas.width - paddle.width) {
-    paddle.x = canvas.width - paddle.width;
-  }
+    paddle.x = x - paddle.width / 2;
+    if (paddle.x < 0) paddle.x = 0;
+    if (paddle.x > canvas.width - paddle.width) {
+        paddle.x = canvas.width - paddle.width;
+    }
+
+    e.preventDefault();
 }, { passive: false });
 
 // Отрисовка
@@ -476,12 +478,26 @@ window.addEventListener('keydown', (e) => {
 
 // Старт игры по тапу
 canvas.addEventListener('touchstart', (e) => {
-  if (!gameRunning && lives > 0 && score === 0) {
-    startSound.currentTime = 0;
-    startSound.play();
-    gameRunning = true;
-    gameLoop();
-  }
+    if (!gameRunning) {
+        // при первом тапе или после Game Over / Win
+        if (lives <= 0 || bricks.every(brick => brick.status === 0)) {
+            score = 0;
+            lives = 3;
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - 60;
+            ball.dx = 4;
+            ball.dy = -4;
+            paddle.x = (canvas.width - paddle.width) / 2;
+            initBricks();
+        }
+
+        gameRunning = true;
+        startSound.currentTime = 0;
+        startSound.play();
+        gameLoop();
+    }
+
+    e.preventDefault();
 }, { passive: false });
 
 let showNameInput = !localStorage.getItem('playerName');
