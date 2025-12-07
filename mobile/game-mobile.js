@@ -1,14 +1,6 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Хитбокс для Change Name
-let changeNameHitbox = {
-    x1: canvas.width - 200,
-    x2: canvas.width - 20,
-    y1: canvas.height - 50,
-    y2: canvas.height - 10
-};
-
 // Картинки
 const ballImg = new Image();
 ballImg.src = '/ball.png';
@@ -116,6 +108,14 @@ function initBricks() {
 }
 
 initBricks();
+
+// Хитбокс для Change Name (увеличенный)
+let changeNameHitbox = {
+    x1: canvas.width - 260,
+    x2: canvas.width - 10,
+    y1: canvas.height - 80,
+    y2: canvas.height - 10
+};
 
 // Клавиатура
 let keys = {};
@@ -507,12 +507,13 @@ canvas.addEventListener('touchstart', (e) => {
     const iconY1 = canvas.height - 80;
     const iconY2 = canvas.height - 0;
 
-    if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
-        soundOn = !soundOn;
-        updateSoundVolume();
-        e.preventDefault();
-        return;
-    }
+if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
+    soundOn = !soundOn;
+    localStorage.setItem('soundOn', String(soundOn));
+    updateSoundVolume();
+    e.preventDefault();
+    return;
+}
 
     // Остальные тапы — старт игры
     if (!gameRunning) {
