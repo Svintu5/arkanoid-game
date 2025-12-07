@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+  <title>Genlayer Arkanoid Mobile</title>
+
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+      font-family: 'Switzer', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    canvas {
+      background: #000;
+      border: 2px solid #fff;
+      width: 100vw;
+      height: auto;
+      max-height: 100vh;
+      display: block;
+    }
+
+    #nameInput {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      min-width: 80vw;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px 24px;
+      border-radius: 16px;
+      border: 2px solid #cc3da4;
+      box-shadow: 0 0 30px rgba(204, 61, 164, 0.7);
+      color: #fff;
+      text-align: center;
+      display: none;
+    }
+
+    #nameInput input {
+      width: 100%;
+      font-family: 'Switzer', Arial, sans-serif;
+      font-size: 24px;
+      padding: 10px 12px;
+      border: 2px solid #cc3da4;
+      background: rgba(0, 0, 0, 0.9);
+      color: #cc3da4;
+      border-radius: 10px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    #nameInput button {
+      margin-top: 16px;
+      font-family: 'Switzer', Arial, sans-serif;
+      font-size: 18px;
+      padding: 10px 24px;
+      background: #cc3da4;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    #nameInput button:hover {
+      background: #b8338e;
+      box-shadow: 0 0 20px rgba(204, 61, 164, 0.5);
+    }
+  </style>
+</head>
+<body>
+  nvas id="gameCanvas" width="800" heightt="600"></canvas>
+
+  <div id="nameInput">
+    <input
+      type="text"
+      id="playerName"
+      placeholder="Genfren Name"
+      maxlength="12"
+      onkeydown="handleNameInputKey(event)"
+    >
+    <br><br>
+    <button onclick="saveName()">LFGEN!</button>
+  </div>
+
+  <script src="game-mobile.js"></script>
+</body>
+</html>
 
