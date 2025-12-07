@@ -582,10 +582,13 @@ canvas.addEventListener('click', (e) => {
     const iconY1 = canvas.height - 50;
     const iconY2 = canvas.height - 10;
 
-    if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
-        soundOn = !soundOn;
-        updateSoundVolume();
-    }
+if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
+    soundOn = !soundOn;
+    localStorage.setItem('soundOn', String(soundOn));
+    updateSoundVolume();
+    e.preventDefault();
+    return;
+}
 });
 
 // Рендер-цикл
