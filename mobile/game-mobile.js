@@ -401,13 +401,17 @@ function gameLoop() {
     // Выпадение вниз
     if (ball.y - ball.radius > canvas.height) {
         lives--;
-        lostSound.currentTime = 0;
-        lostSound.play();
+if (soundOn) {
+    lostSound.currentTime = 0;
+    lostSound.play();
+}
 
         if (lives <= 0) {
             gameRunning = false;
-            finishSound.currentTime = 0;
-            finishSound.play();
+if (soundOn) {
+    finishSound.currentTime = 0;
+    finishSound.play();
+}
             addScoreToLeaderboard(score);
         } else {
             ball.x = canvas.width / 2;
@@ -482,9 +486,11 @@ window.addEventListener('keydown', (e) => {
         }
 
         gameRunning = true;
-        startSound.currentTime = 0;
-        startSound.play();
-        gameLoop();
+      if (soundOn) {
+    startSound.currentTime = 0;
+    startSound.play();
+}
+gameLoop();
     }
 });
 
@@ -504,9 +510,11 @@ canvas.addEventListener('touchstart', (e) => {
         }
 
         gameRunning = true;
-        startSound.currentTime = 0;
-        startSound.play();
-        gameLoop();
+if (soundOn) {
+    startSound.currentTime = 0;
+    startSound.play();
+}
+gameLoop();
     }
 
     e.preventDefault();
