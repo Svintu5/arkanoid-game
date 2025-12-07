@@ -109,20 +109,6 @@ let keys = {};
 window.addEventListener('keydown', (e) => (keys[e.keyCode] = true));
 window.addEventListener('keyup', (e) => (keys[e.keyCode] = false));
 
-// Тач-управление для смартфонов
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = touch.clientX - rect.left;
-
-    paddle.x = x - paddle.width / 2;
-    if (paddle.x < 0) paddle.x = 0;
-    if (paddle.x > canvas.width - paddle.width) {
-        paddle.x = canvas.width - paddle.width;
-    }
-}, { passive: false });
-
 // Отрисовка
 function draw() {
     // Фон
