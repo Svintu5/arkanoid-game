@@ -553,6 +553,39 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
+canvas.addEventListener('touchstart', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (touch.clientX - rect.left) * scaleX;
+    const y = (touch.clientY - rect.top) * scaleY;
+
+    const hb = changeNameHitbox;
+
+    // Тап по Change Name
+    if (
+        !gameRunning &&
+        x >= hb.x1 && x <= hb.x2 &&
+        y >= hb.y1 && y <= hb.y2
+    ) {
+        document.getElementById('nameInput').style.display = 'block';
+        e.preventDefault();
+        return;
+    }
+
+    // Тап по иконке звука (нота в левом нижнем углу)
+    const iconX1 = 10;
+    const iconX2 = 50;
+    const iconY1 = canvas.height - 50;
+    const iconY2 = canvas.height - 10;
+
+    if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
+        soundOn = !soundOn;
+        updateSoundVolume();
+        e.preventDefault();
+    }
+}, { passive: false });
 
 // Цикл отрисовки
 function renderLoop() {
