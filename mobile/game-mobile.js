@@ -9,24 +9,24 @@ let changeNameHitbox = {
 };
 
 const ballImg = new Image();
-ballImg.src = 'ball.png';
+ballImg.src = '/ball.png';
 
 const brickImages = [
-    Object.assign(new Image(), { src: 'brick1.png' }),
-    Object.assign(new Image(), { src: 'brick2.png' }),
-    Object.assign(new Image(), { src: 'brick3.png' }),
-    Object.assign(new Image(), { src: 'brick4.png' }),
-    Object.assign(new Image(), { src: 'brick5.png' }),
-    Object.assign(new Image(), { src: 'brick6.png' }),
+    Object.assign(new Image(), { src: '/brick1.png' }),
+    Object.assign(new Image(), { src: '/brick2.png' }),
+    Object.assign(new Image(), { src: '/brick3.png' }),
+    Object.assign(new Image(), { src: '/brick4.png' }),
+    Object.assign(new Image(), { src: '/brick5.png' }),
+    Object.assign(new Image(), { src: '/brick6.png' }),
 ];
 
 const backImg = new Image();
-backImg.src = 'back.png';
+backImg.src = '/back.png';
 
-const hitSound = new Audio('hit.mp3');
-const lostSound = new Audio('lost.mp3');
-const startSound = new Audio('start.mp3');
-const finishSound = new Audio('finish.mp3');
+const hitSound = new Audio('/hit.mp3');
+const lostSound = new Audio('/lost.mp3');
+const startSound = new Audio('/start.mp3');
+const finishSound = new Audio('/finish.mp3');
 
 hitSound.volume = 0.3;
 lostSound.volume = 0.1;
