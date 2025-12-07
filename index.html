@@ -3,6 +3,16 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+       <script>
+      (function () {
+        const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = '/mobile/';
+        }
+      })();
+    </script>
+   
    <title>Genlayer - Arcanoid</title>
 
    <link rel="icon" type="image/png" href="/favicon.png">
