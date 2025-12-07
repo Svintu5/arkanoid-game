@@ -1,6 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Хитбокс для Change Name
 let changeNameHitbox = {
     x1: canvas.width - 200,
     x2: canvas.width - 20,
@@ -8,6 +9,7 @@ let changeNameHitbox = {
     y2: canvas.height - 10
 };
 
+// Картинки
 const ballImg = new Image();
 ballImg.src = '/ball.png';
 
@@ -23,6 +25,7 @@ const brickImages = [
 const backImg = new Image();
 backImg.src = '/back.png';
 
+// Звуки
 const hitSound = new Audio('/hit.mp3');
 const lostSound = new Audio('/lost.mp3');
 const startSound = new Audio('/start.mp3');
@@ -42,7 +45,6 @@ function updateSoundVolume() {
     startSound.volume = 0.4 * v;
     finishSound.volume = 0.4 * v;
 
-    // если звук выключен — останавливаем все активные звуки
     if (!soundOn) {
         hitSound.pause();
         lostSound.pause();
@@ -53,20 +55,23 @@ function updateSoundVolume() {
 
 updateSoundVolume();
 
+// Игрок и лидерборд
 let playerName = localStorage.getItem('playerName') || 'Игрок';
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
 function addScoreToLeaderboard(score) {
-    leaderboard.push({ name: playerName, score: score });
-    leaderboard.sort((a, b) => b.score - a.score); // по убыванию
-    leaderboard = leaderboard.slice(0, 10); // топ 10
+    leaderboard.push({ name: playerName, score });
+    leaderboard.sort((a, b) => b.score - a.score);
+    leaderboard = leaderboard.slice(0, 10);
     localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 }
 
 function startGame() {
     gameRunning = true;
-    startSound.currentTime = 0;
-    startSound.play();
+    if (soundOn) {
+        startSound.currentTime = 0;
+        startSound.play();
+    }
     gameLoop();
 }
 
@@ -78,6 +83,7 @@ let score = 0;
 let lives = 3;
 let gameRunning = false;
 
+// Генерация кирпичей
 function initBricks() {
     bricks = [];
     const brickW = 40;
@@ -88,13 +94,12 @@ function initBricks() {
     for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 18; col++) {
             let hits;
-            
             if (row === 0) {
-                hits = 3;  // первый сверху
+                hits = 3;
             } else if (row === 1) {
-                hits = 2;  // второй сверху  
+                hits = 2;
             } else {
-                hits = 1;  // остальные ряды (3,4,5)
+                hits = 1;
             }
 
             bricks.push({
@@ -104,7 +109,7 @@ function initBricks() {
                 height: brickH,
                 status: 1,
                 type: row,
-                hits: hits,
+                hits
             });
         }
     }
@@ -112,16 +117,16 @@ function initBricks() {
 
 initBricks();
 
-// Управление клавишами
+// Клавиатура
 let keys = {};
 window.addEventListener('keydown', (e) => (keys[e.keyCode] = true));
 window.addEventListener('keyup', (e) => (keys[e.keyCode] = false));
 
-// Тач-управление для смартфонов
+// Тач-управление
 canvas.addEventListener('touchmove', (e) => {
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
-    const scaleX = canvas.width / rect.width; // чтобы не зависеть от CSS-скейла
+    const scaleX = canvas.width / rect.width;
     const x = (touch.clientX - rect.left) * scaleX;
 
     paddle.x = x - paddle.width / 2;
@@ -143,7 +148,7 @@ function draw() {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Ракетка с градиентом и свечением
+    // Ракетка
     const gradient = ctx.createLinearGradient(
         paddle.x,
         paddle.y,
@@ -159,20 +164,17 @@ function draw() {
     ctx.fillStyle = gradient;
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-    // Контур
     ctx.shadowBlur = 0;
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 3;
     ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
 
-    // Свечение края
     ctx.shadowColor = '#cc3da4';
     ctx.shadowBlur = 8;
     ctx.strokeStyle = '#cc3da4';
     ctx.lineWidth = 1;
     ctx.strokeRect(paddle.x + 1, paddle.y + 1, paddle.width - 2, paddle.height - 2);
 
-    // Сброс свечения
     ctx.shadowBlur = 0;
     ctx.shadowColor = 'transparent';
 
@@ -193,7 +195,7 @@ function draw() {
         ctx.closePath();
     }
 
-    // Кирпичи как картинки
+    // Кирпичи
     bricks.forEach((brick) => {
         if (brick.status === 1) {
             const img = brickImages[brick.type];
@@ -206,34 +208,26 @@ function draw() {
         }
     });
 
-    // Счёт слева
-ctx.font = 'bold 24px Switzer, Arial';
-ctx.fillStyle = '#cc3da4';
-ctx.textAlign = 'left';
-ctx.textBaseline = 'top';
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 10;
-ctx.fillText('Score: ' + score, 10, 10);
+    // HUD: счёт / имя / жизни
+    ctx.font = 'bold 24px Switzer, Arial';
+    ctx.fillStyle = '#cc3da4';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.shadowColor = '#cc3da4';
+    ctx.shadowBlur = 10;
+    ctx.fillText('Score: ' + score, 10, 10);
 
-// Имя игрока по центру сверху
-ctx.font = '24px Switzer, Arial';
-ctx.fillStyle = '#ffffff';
-ctx.textAlign = 'center';
-ctx.textBaseline = 'top';
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 10;
-ctx.fillText('Player: ' + playerName, canvas.width / 2, 10);
+    ctx.font = '24px Switzer, Arial';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.fillText('Player: ' + playerName, canvas.width / 2, 10);
 
-// Жизни справа
-ctx.font = 'bold 24px Switzer, Arial';
-ctx.fillStyle = '#cc3da4';
-ctx.textAlign = 'left';
-ctx.textBaseline = 'top';
-ctx.shadowColor = '#cc3da4';
-ctx.shadowBlur = 10;
-ctx.fillText('Lives: ' + lives, 700, 10);
+    ctx.font = 'bold 24px Switzer, Arial';
+    ctx.fillStyle = '#cc3da4';
+    ctx.textAlign = 'left';
+    ctx.fillText('Lives: ' + lives, 700, 10);
 
-ctx.shadowBlur = 0;
+    ctx.shadowBlur = 0;
 
     // Стартовый экран
     if (!gameRunning && lives > 0 && score === 0) {
@@ -286,7 +280,6 @@ ctx.shadowBlur = 0;
             ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
         });
 
-        // Change Name (правый нижний угол)
         ctx.textAlign = 'right';
         ctx.textBaseline = 'bottom';
         ctx.font = '18px Switzer, Arial';
@@ -295,12 +288,13 @@ ctx.shadowBlur = 0;
         ctx.shadowBlur = 10;
         ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
         ctx.shadowBlur = 0;
+
         changeNameHitbox = {
-    x1: canvas.width - 200,
-    x2: canvas.width - 20,
-    y1: canvas.height - 50,
-    y2: canvas.height - 10
-    };
+            x1: canvas.width - 200,
+            x2: canvas.width - 20,
+            y1: canvas.height - 50,
+            y2: canvas.height - 10
+        };
     }
 
     // You Win
@@ -336,7 +330,6 @@ ctx.shadowBlur = 0;
             ctx.fillText(`${i + 1}. ${entry.name} — ${entry.score}`, canvas.width / 2, y);
         });
 
-        // Change Name (правый нижний угол)
         ctx.textAlign = 'right';
         ctx.textBaseline = 'bottom';
         ctx.font = '18px Switzer, Arial';
@@ -345,14 +338,16 @@ ctx.shadowBlur = 0;
         ctx.shadowBlur = 10;
         ctx.fillText('Change Name', canvas.width - 20, canvas.height - 20);
         ctx.shadowBlur = 0;
+
         changeNameHitbox = {
-    x1: canvas.width - 200,
-    x2: canvas.width - 20,
-    y1: canvas.height - 50,
-    y2: canvas.height - 10
-    };
+            x1: canvas.width - 200,
+            x2: canvas.width - 20,
+            y1: canvas.height - 50,
+            y2: canvas.height - 10
+        };
     }
-    // Иконка звука (нота) в левом нижнем углу
+
+    // Иконка звука
     const iconX = 36;
     const iconY = canvas.height - 36;
     ctx.save();
@@ -364,33 +359,28 @@ ctx.shadowBlur = 0;
     ctx.shadowBlur = soundOn ? 10 : 0;
     ctx.fillText(soundOn ? '♪' : '🔇', iconX, iconY);
     ctx.restore();
-   
-} // ← конец draw()
+}
 
 // Игровой цикл
 function gameLoop() {
-    if (!gameRunning) {
-        return;
-    }
-    
-    // Победа: все кирпичи уничтожены
+    if (!gameRunning) return;
+
     if (bricks.every(brick => brick.status === 0)) {
         gameRunning = false;
-        finishSound.currentTime = 0;
-        finishSound.play();
+        if (soundOn) {
+            finishSound.currentTime = 0;
+            finishSound.play();
+        }
         addScoreToLeaderboard(score);
         return;
     }
 
-    // Движение ракетки
     if (keys[37] && paddle.x > 0) paddle.x -= paddle.speed;
     if (keys[39] && paddle.x < canvas.width - paddle.width) paddle.x += paddle.speed;
 
-    // Движение шарика
     ball.x += ball.dx;
     ball.y += ball.dy;
 
-    // Отскок от стен
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
         ball.dx = -ball.dx;
     }
@@ -398,20 +388,19 @@ function gameLoop() {
         ball.dy = -ball.dy;
     }
 
-    // Выпадение вниз
     if (ball.y - ball.radius > canvas.height) {
         lives--;
-if (soundOn) {
-    lostSound.currentTime = 0;
-    lostSound.play();
-}
+        if (soundOn) {
+            lostSound.currentTime = 0;
+            lostSound.play();
+        }
 
         if (lives <= 0) {
             gameRunning = false;
-if (soundOn) {
-    finishSound.currentTime = 0;
-    finishSound.play();
-}
+            if (soundOn) {
+                finishSound.currentTime = 0;
+                finishSound.play();
+            }
             addScoreToLeaderboard(score);
         } else {
             ball.x = canvas.width / 2;
@@ -422,7 +411,6 @@ if (soundOn) {
         }
     }
 
-    // Коллизия с ракеткой
     if (
         ball.y + ball.radius > paddle.y &&
         ball.y - ball.radius < paddle.y + paddle.height &&
@@ -432,36 +420,34 @@ if (soundOn) {
         ball.dy = -Math.abs(ball.dy);
         const hitPos = ball.x - (paddle.x + paddle.width / 2);
         ball.dx = hitPos * 0.15;
-if (soundOn) {
-    hitSound.currentTime = 0;
-    hitSound.play();
-}
-    }
-
-    // Коллизия с кирпичами
-for (let i = 0; i < bricks.length; i++) {
-    const brick = bricks[i];
-    if (
-        brick.status === 1 &&
-        ball.x > brick.x &&
-        ball.x < brick.x + brick.width &&
-        ball.y - ball.radius < brick.y + brick.height &&
-        ball.y + ball.radius > brick.y
-    ) {
-        brick.hits -= 1;          // уменьшаем количество оставшихся ударов
-        if (brick.hits <= 0) {
-            brick.status = 0;     // уничтожаем кирпич, когда удары закончились
-            score += 10;
+        if (soundOn) {
+            hitSound.currentTime = 0;
+            hitSound.play();
         }
-        ball.dy = -ball.dy;
-if (soundOn) {
-    hitSound.currentTime = 0;
-    hitSound.play();
-}
-        break;
     }
-}
 
+    for (let i = 0; i < bricks.length; i++) {
+        const brick = bricks[i];
+        if (
+            brick.status === 1 &&
+            ball.x > brick.x &&
+            ball.x < brick.x + brick.width &&
+            ball.y - ball.radius < brick.y + brick.height &&
+            ball.y + ball.radius > brick.y
+        ) {
+            brick.hits -= 1;
+            if (brick.hits <= 0) {
+                brick.status = 0;
+                score += 10;
+            }
+            ball.dy = -ball.dy;
+            if (soundOn) {
+                hitSound.currentTime = 0;
+                hitSound.play();
+            }
+            break;
+        }
+    }
 
     draw();
     requestAnimationFrame(gameLoop);
@@ -474,7 +460,6 @@ window.addEventListener('keydown', (e) => {
             !gameRunning &&
             (lives <= 0 || bricks.every(brick => brick.status === 0))
         ) {
-            // Полный рестарт
             score = 0;
             lives = 3;
             ball.x = canvas.width / 2;
@@ -486,18 +471,17 @@ window.addEventListener('keydown', (e) => {
         }
 
         gameRunning = true;
-      if (soundOn) {
-    startSound.currentTime = 0;
-    startSound.play();
-}
-gameLoop();
+        if (soundOn) {
+            startSound.currentTime = 0;
+            startSound.play();
+        }
+        gameLoop();
     }
 });
 
 // Старт игры по тапу
 canvas.addEventListener('touchstart', (e) => {
     if (!gameRunning) {
-        // при первом тапе или после Game Over / Win
         if (lives <= 0 || bricks.every(brick => brick.status === 0)) {
             score = 0;
             lives = 3;
@@ -510,24 +494,23 @@ canvas.addEventListener('touchstart', (e) => {
         }
 
         gameRunning = true;
-if (soundOn) {
-    startSound.currentTime = 0;
-    startSound.play();
-}
-gameLoop();
+        if (soundOn) {
+            startSound.currentTime = 0;
+            startSound.play();
+        }
+        gameLoop();
     }
 
     e.preventDefault();
 }, { passive: false });
 
+// Имя игрока
 let showNameInput = !localStorage.getItem('playerName');
 
-// Показать поле ввода имени при первом запуске
 if (showNameInput) {
     document.getElementById('nameInput').style.display = 'block';
 }
 
-// Функция сохранения имени игрока
 function saveName() {
     const input = document.getElementById('playerName');
     const name = input.value.trim() || 'Player Name';
@@ -544,6 +527,7 @@ function handleNameInputKey(e) {
     }
 }
 
+// Клики по canvas
 canvas.addEventListener('click', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -551,7 +535,6 @@ canvas.addEventListener('click', (e) => {
 
     const hb = changeNameHitbox;
 
-    // Клик по Change Name
     if (
         !gameRunning &&
         x >= hb.x1 && x <= hb.x2 &&
@@ -561,7 +544,6 @@ canvas.addEventListener('click', (e) => {
         return;
     }
 
-    // Клик по иконке звука (нота в левом нижнем углу)
     const iconX1 = 10;
     const iconX2 = 50;
     const iconY1 = canvas.height - 50;
@@ -573,6 +555,7 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
+// Тапы по Change Name и ноте
 canvas.addEventListener('touchstart', (e) => {
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
@@ -583,7 +566,6 @@ canvas.addEventListener('touchstart', (e) => {
 
     const hb = changeNameHitbox;
 
-    // Тап по Change Name
     if (
         !gameRunning &&
         x >= hb.x1 && x <= hb.x2 &&
@@ -594,7 +576,6 @@ canvas.addEventListener('touchstart', (e) => {
         return;
     }
 
-    // Тап по иконке звука (нота в левом нижнем углу)
     const iconX1 = 10;
     const iconX2 = 50;
     const iconY1 = canvas.height - 50;
@@ -607,7 +588,7 @@ canvas.addEventListener('touchstart', (e) => {
     }
 }, { passive: false });
 
-// Цикл отрисовки
+// Рендер-цикл
 function renderLoop() {
     draw();
     requestAnimationFrame(renderLoop);
