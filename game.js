@@ -1,6 +1,19 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Адаптация canvas под экран
+function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = 800;  // логическая ширина
+    canvas.height = 600; // логическая высота
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+}
+
+// При запуске и при изменении размера
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
 let changeNameHitbox = {
     x1: canvas.width - 200,
     x2: canvas.width - 20,
