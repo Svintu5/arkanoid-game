@@ -41,6 +41,14 @@ function updateSoundVolume() {
     lostSound.volume = 0.1 * v;
     startSound.volume = 0.4 * v;
     finishSound.volume = 0.4 * v;
+
+    // если звук выключен — останавливаем все активные звуки
+    if (!soundOn) {
+        hitSound.pause();
+        lostSound.pause();
+        startSound.pause();
+        finishSound.pause();
+    }
 }
 
 updateSoundVolume();
@@ -420,8 +428,10 @@ function gameLoop() {
         ball.dy = -Math.abs(ball.dy);
         const hitPos = ball.x - (paddle.x + paddle.width / 2);
         ball.dx = hitPos * 0.15;
-        hitSound.currentTime = 0;
-        hitSound.play();
+if (soundOn) {
+    hitSound.currentTime = 0;
+    hitSound.play();
+}
     }
 
     // Коллизия с кирпичами
@@ -440,8 +450,10 @@ for (let i = 0; i < bricks.length; i++) {
             score += 10;
         }
         ball.dy = -ball.dy;
-        hitSound.currentTime = 0;
-        hitSound.play();
+if (soundOn) {
+    hitSound.currentTime = 0;
+    hitSound.play();
+}
         break;
     }
 }
