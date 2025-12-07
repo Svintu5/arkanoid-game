@@ -36,7 +36,7 @@ lostSound.volume = 0.1;
 startSound.volume = 0.4;
 finishSound.volume = 0.4;
 
-let soundOn = true;
+let soundOn = localStorage.getItem('soundOn') === 'false' ? false : true;
 
 function updateSoundVolume() {
     const v = soundOn ? 1 : 0;
@@ -290,9 +290,9 @@ function draw() {
         ctx.shadowBlur = 0;
 
         changeNameHitbox = {
-            x1: canvas.width - 200,
-            x2: canvas.width - 20,
-            y1: canvas.height - 50,
+            x1: canvas.width - 260,
+            x2: canvas.width - 10,
+            y1: canvas.height - 80,
             y2: canvas.height - 10
         };
     }
@@ -340,9 +340,9 @@ function draw() {
         ctx.shadowBlur = 0;
 
         changeNameHitbox = {
-            x1: canvas.width - 200,
-            x2: canvas.width - 20,
-            y1: canvas.height - 50,
+            x1: canvas.width - 260,
+            x2: canvas.width - 10,
+            y1: canvas.height - 80,
             y2: canvas.height - 10
         };
     }
@@ -502,10 +502,10 @@ canvas.addEventListener('touchstart', (e) => {
     }
 
     // Тап по иконке звука (нота в левом нижнем углу)
-    const iconX1 = 10;
-    const iconX2 = 50;
-    const iconY1 = canvas.height - 50;
-    const iconY2 = canvas.height - 10;
+    const iconX1 = 0;
+    const iconX2 = 80;
+    const iconY1 = canvas.height - 80;
+    const iconY2 = canvas.height - 0;
 
     if (x >= iconX1 && x <= iconX2 && y >= iconY1 && y <= iconY2) {
         soundOn = !soundOn;
